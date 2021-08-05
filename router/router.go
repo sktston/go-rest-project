@@ -25,6 +25,7 @@ func SetupRouter() *gin.Engine {
 		ug.DELETE("/:id", handler.DeleteBook)
 	}
 
+	//Health check apis for k8s
 	hg := r.Group("/health")
 	{
 		hg.GET("/live", gin.WrapF(health.LiveEndpoint))
