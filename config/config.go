@@ -3,6 +3,8 @@ package config
 import (
 	"bytes"
 	_ "embed"
+	"github.com/gin-gonic/gin"
+	"github.com/rs/zerolog"
 	"github.com/spf13/viper"
 	"strings"
 )
@@ -24,4 +26,18 @@ func LoadConfig() (err error) {
 	}
 
 	return
+}
+
+func SetLogLevel(level string) {
+	if strings.ToUpper(level) == "DEBUG" {
+		zerolog.SetGlobalLevel(zerolog.DebugLevel)
+		gin.SetMode(gin.DebugMode)
+	} else if strings.ToUpper(level) == "INFO" {
+		zerolog.SetGlobalLevel(zerolog.InfoLevel)
+		gin.SetMode(gin.ReleaseMode)
+	} else {
+		// default is INFO
+		zerolog.SetGlobalLevel(zerolog.InfoLevel)
+		gin.SetMode(gin.ReleaseMode)
+	}
 }
