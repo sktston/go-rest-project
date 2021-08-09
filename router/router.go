@@ -13,7 +13,8 @@ import (
 func SetupRouter() *gin.Engine {
 	health := healthcheck.NewHandler()
 
-	r := gin.Default()
+	r := gin.New()
+	r.Use(gin.Recovery())
 	r.Use(logger.SetLogger(logger.WithWriter(zerolog.ConsoleWriter{Out:os.Stderr,TimeFormat: time.RFC3339})))
 
 	ug := r.Group("/books")
