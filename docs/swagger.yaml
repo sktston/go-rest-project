@@ -1,0 +1,105 @@
+definitions:
+  model.BookRequestDTO:
+    properties:
+      author:
+        type: string
+      publisher:
+        type: string
+      title:
+        type: string
+    required:
+    - author
+    - publisher
+    - title
+    type: object
+  model.BookResponseDTO:
+    properties:
+      author:
+        type: string
+      id:
+        type: integer
+      publisher:
+        type: string
+      title:
+        type: string
+    type: object
+info:
+  contact: {}
+paths:
+  /books:
+    get:
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/model.BookResponseDTO'
+            type: array
+      summary: Get all books
+      tags:
+      - books
+    post:
+      parameters:
+      - description: body
+        in: body
+        name: body
+        schema:
+          $ref: '#/definitions/model.BookRequestDTO'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.BookResponseDTO'
+      summary: Create Book
+      tags:
+      - books
+  /books/{id}:
+    delete:
+      parameters:
+      - description: id
+        in: path
+        name: id
+        required: true
+        type: string
+      responses:
+        "200":
+          description: ""
+      summary: Delete the book
+      tags:
+      - books
+    get:
+      parameters:
+      - description: id
+        in: path
+        name: id
+        required: true
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.BookResponseDTO'
+      summary: Get the book by id
+      tags:
+      - books
+    put:
+      parameters:
+      - description: id
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: body
+        in: body
+        name: body
+        schema:
+          $ref: '#/definitions/model.BookRequestDTO'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.BookResponseDTO'
+      summary: Update the book information
+      tags:
+      - books
+swagger: "2.0"
