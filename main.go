@@ -2,6 +2,7 @@ package main
 
 import (
 	"github.com/airoasis/go-rest-project/config"
+	"github.com/airoasis/go-rest-project/docs"
 	"github.com/airoasis/go-rest-project/router"
 	"github.com/gin-gonic/gin"
 	"github.com/rs/zerolog"
@@ -14,6 +15,11 @@ import (
 )
 
 func main() {
+	// swagger description
+	// See: https://github.com/swaggo/swag#how-to-use-it-with-gin
+	docs.SwaggerInfo.Title = "Go Rest Project API"
+	docs.SwaggerInfo.Version = "0.1.0"
+
 	//Set a logger with zerolog
 	zerolog.SetGlobalLevel(zerolog.InfoLevel)
 	if gin.IsDebugging() {

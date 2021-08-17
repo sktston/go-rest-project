@@ -11,7 +11,11 @@ import (
 	"strconv"
 )
 
-//GetBooks ... Get all books
+// GetBooks godoc
+// @Summary Get all books
+// @Tags books
+// @Success 200 {object} []model.BookResponseDTO
+// @Router /books [get]
 func GetBooks(c *gin.Context) {
 	var books []entity.Book
 	if err := repository.GetAllBooks(&books); err != nil {
@@ -23,7 +27,12 @@ func GetBooks(c *gin.Context) {
 	}
 }
 
-//CreateBook ... Create Book
+// CreateBook godoc
+// @Summary Create Book
+// @Tags books
+// @Param body body model.BookRequestDTO false "body"
+// @Success 200 {object} model.BookResponseDTO
+// @Router /books [post]
 func CreateBook(c *gin.Context) {
 	var bookDTO model.BookRequestDTO
 	if err := c.ShouldBindJSON(&bookDTO); err != nil {
@@ -43,7 +52,12 @@ func CreateBook(c *gin.Context) {
 	}
 }
 
-//GetBookByID ... Get the book by id
+// GetBookByID godoc
+// @Summary Get the book by id
+// @Tags books
+// @Param id path string true "id"
+// @Success 200 {object} model.BookResponseDTO
+// @Router /books/{id} [get]
 func GetBookByID(c *gin.Context) {
 	id, _ := strconv.Atoi(c.Param("id"))
 	var book entity.Book
@@ -56,7 +70,13 @@ func GetBookByID(c *gin.Context) {
 	}
 }
 
-//UpdateBook ... Update the book information
+// UpdateBook godoc
+// @Summary Update the book information
+// @Tags books
+// @Param id path string true "id"
+// @Param body body model.BookRequestDTO false "body"
+// @Success 200 {object} model.BookResponseDTO
+// @Router /books/{id} [put]
 func UpdateBook(c *gin.Context) {
 	var book entity.Book
 	id, _ := strconv.Atoi(c.Param("id"))
@@ -81,7 +101,13 @@ func UpdateBook(c *gin.Context) {
 	}
 }
 
-//DeleteBook ... Delete the book
+
+// DeleteBook godoc
+// @Summary Delete the book
+// @Tags books
+// @Param id path string true "id"
+// @Success 200
+// @Router /books/{id} [delete]
 func DeleteBook(c *gin.Context) {
 	var book entity.Book
 	id, _ := strconv.Atoi(c.Param("id"))
