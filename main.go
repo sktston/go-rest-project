@@ -39,7 +39,7 @@ func main() {
 		log.Fatal().Msgf("Status: %v", err)
 	}
 
-	//Migrate the schema (Create the user table)
+	//Migrate the schema (Create the book table)
 	config.MigrateSchema()
 
 	//Start the gin server
