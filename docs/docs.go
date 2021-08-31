@@ -154,13 +154,19 @@ var doc = `{
             ],
             "properties": {
                 "author": {
-                    "type": "string"
+                    "description": "book author",
+                    "type": "string",
+                    "example": "David Wiesner"
                 },
                 "publisher": {
-                    "type": "string"
+                    "description": "book publisher",
+                    "type": "string",
+                    "example": "Clarion Books"
                 },
                 "title": {
-                    "type": "string"
+                    "description": "book title",
+                    "type": "string",
+                    "example": "The Three Pigs"
                 }
             }
         },
@@ -168,16 +174,24 @@ var doc = `{
             "type": "object",
             "properties": {
                 "author": {
-                    "type": "string"
+                    "description": "book author",
+                    "type": "string",
+                    "example": "David Wiesner"
                 },
                 "id": {
-                    "type": "integer"
+                    "description": "book id",
+                    "type": "integer",
+                    "example": 1234
                 },
                 "publisher": {
-                    "type": "string"
+                    "description": "book publisher",
+                    "type": "string",
+                    "example": "Clarion Books"
                 },
                 "title": {
-                    "type": "string"
+                    "description": "book title",
+                    "type": "string",
+                    "example": "The Three Pigs"
                 }
             }
         }

@@ -2,10 +2,16 @@ definitions:
   model.BookRequestDTO:
     properties:
       author:
+        description: book author
+        example: David Wiesner
         type: string
       publisher:
+        description: book publisher
+        example: Clarion Books
         type: string
       title:
+        description: book title
+        example: The Three Pigs
         type: string
     required:
     - author
@@ -15,12 +21,20 @@ definitions:
   model.BookResponseDTO:
     properties:
       author:
+        description: book author
+        example: David Wiesner
         type: string
       id:
+        description: book id
+        example: 1234
         type: integer
       publisher:
+        description: book publisher
+        example: Clarion Books
         type: string
       title:
+        description: book title
+        example: The Three Pigs
         type: string
     type: object
 info:
