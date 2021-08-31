@@ -1,1 +1,71 @@
-{"openapi":"3.0.1","info":{"contact":{}},"servers":[{"url":"/"}],"paths":{"/books":{"get":{"tags":["books"],"summary":"Get all books","responses":{"200":{"description":"OK","content":{"*/*":{"schema":{"type":"array","items":{"$ref":"#/components/schemas/model.BookResponseDTO"}}}}}}},"post":{"tags":["books"],"summary":"Create Book","requestBody":{"description":"body","content":{"*/*":{"schema":{"$ref":"#/components/schemas/model.BookRequestDTO"}}},"required":false},"responses":{"200":{"description":"OK","content":{"*/*":{"schema":{"$ref":"#/components/schemas/model.BookResponseDTO"}}}}},"x-codegen-request-body-name":"body"}},"/books/{id}":{"get":{"tags":["books"],"summary":"Get the book by id","parameters":[{"name":"id","in":"path","description":"id","required":true,"schema":{"type":"string"}}],"responses":{"200":{"description":"OK","content":{"*/*":{"schema":{"$ref":"#/components/schemas/model.BookResponseDTO"}}}}}},"put":{"tags":["books"],"summary":"Update the book information","parameters":[{"name":"id","in":"path","description":"id","required":true,"schema":{"type":"string"}}],"requestBody":{"description":"body","content":{"*/*":{"schema":{"$ref":"#/components/schemas/model.BookRequestDTO"}}},"required":false},"responses":{"200":{"description":"OK","content":{"*/*":{"schema":{"$ref":"#/components/schemas/model.BookResponseDTO"}}}}},"x-codegen-request-body-name":"body"},"delete":{"tags":["books"],"summary":"Delete the book","parameters":[{"name":"id","in":"path","description":"id","required":true,"schema":{"type":"string"}}],"responses":{"200":{"description":"","content":{}}}}}},"components":{"schemas":{"model.BookRequestDTO":{"required":["author","publisher","title"],"type":"object","properties":{"author":{"type":"string","description":"book author","example":"David Wiesner"},"publisher":{"type":"string","description":"book publisher","example":"Clarion Books"},"title":{"type":"string","description":"book title","example":"The Three Pigs"}}},"model.BookResponseDTO":{"type":"object","properties":{"author":{"type":"string","description":"book author","example":"David Wiesner"},"id":{"type":"integer","description":"book id","example":1234},"publisher":{"type":"string","description":"book publisher","example":"Clarion Books"},"title":{"type":"string","description":"book title","example":"The Three Pigs"}}}}}}
+openapi: 3.0.0
+info:
+  version: 1.0.0
+  title: Wallet Manager
+servers:
+  - url: 'https://petstore.swagger.io/v1'
+paths:
+  /user:
+    get:
+      summary: 'Sample endpoint: Returns details about a particular user'
+      operationId: listUser
+      tags:
+        - user
+      parameters:
+        - name: id
+          in: query
+          description: ID of the user
+          required: true
+          schema:
+            type: integer
+            format: int32
+      responses:
+        '200':
+          description: 'Sample response: Details about a user by ID'
+          headers:
+            x-next:
+              description: A link to the next page of responses
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+components:
+  schemas:
+    User:
+      type: object
+      required:
+        - id
+        - name
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+        tag:
+          type: string
+    Error:
+      type: object
+      required:
+        - code
+        - message
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string
+  securitySchemes:
+    BasicAuth:
+      type: http
+      scheme: basic
+security:
+  - BasicAuth: []
