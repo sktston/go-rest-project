@@ -16,7 +16,7 @@
                 "tags": [
                     "books"
                 ],
-                "summary": "Get all books",
+                "summary": "Get books",
                 "responses": {
                     "200": {
                         "description": "OK",
