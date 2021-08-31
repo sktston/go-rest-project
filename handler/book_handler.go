@@ -1,12 +1,12 @@
 package handler
 
 import (
-	"github.com/sktston/go-rest-project/model"
-	"github.com/sktston/go-rest-project/model/entity"
-	"github.com/sktston/go-rest-project/repository"
 	"github.com/gin-gonic/gin"
 	"github.com/jinzhu/copier"
 	"github.com/rs/zerolog/log"
+	"github.com/sktston/go-rest-project/model"
+	"github.com/sktston/go-rest-project/model/entity"
+	"github.com/sktston/go-rest-project/repository"
 	"net/http"
 	"strconv"
 )
@@ -19,7 +19,7 @@ import (
 func GetBooks(c *gin.Context) {
 	var books []entity.Book
 	if err := repository.GetAllBooks(&books); err != nil {
-		c.AbortWithStatus(http.StatusNotFound)
+		c.AbortWithStatusJSON(http.StatusNotFound, gin.H{"error": err.Error()})
 	} else {
 		var bookResponseDTOs []model.BookResponseDTO
 		copier.Copy(&bookResponseDTOs, books)
@@ -36,7 +36,7 @@ func GetBooks(c *gin.Context) {
 func CreateBook(c *gin.Context) {
 	var bookDTO model.BookRequestDTO
 	if err := c.ShouldBindJSON(&bookDTO); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
@@ -44,7 +44,7 @@ func CreateBook(c *gin.Context) {
 	copier.Copy(&book, bookDTO)
 	if err := repository.CreateBook(&book); err != nil {
 		log.Error().Err(err).Msg("ERROR creating book data")
-		c.AbortWithStatus(http.StatusNotFound)
+		c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 	} else {
 		var bookResponseDTO model.BookResponseDTO
 		copier.Copy(&bookResponseDTO, book)
@@ -62,7 +62,7 @@ func GetBookByID(c *gin.Context) {
 	id, _ := strconv.Atoi(c.Param("id"))
 	var book entity.Book
 	if err := repository.GetBookByID(&book, id); err != nil {
-		c.AbortWithStatus(http.StatusNotFound)
+		c.AbortWithStatusJSON(http.StatusNotFound, gin.H{"error": err.Error()})
 	} else {
 		var bookResponseDTO model.BookResponseDTO
 		copier.Copy(&bookResponseDTO, book)
@@ -81,19 +81,19 @@ func UpdateBook(c *gin.Context) {
 	var book entity.Book
 	id, _ := strconv.Atoi(c.Param("id"))
 	if err := repository.GetBookByID(&book, id); err != nil {
-		c.Status(http.StatusNotFound)
+		c.AbortWithStatusJSON(http.StatusNotFound, gin.H{"error": err.Error()})
 		return
 	}
 
 	var bookRequestDTO model.BookRequestDTO
 	if err := c.ShouldBindJSON(&bookRequestDTO); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
 	copier.Copy(&book, bookRequestDTO)
 	if err := repository.UpdateBook(&book); err != nil {
-		c.AbortWithStatus(http.StatusNotFound)
+		c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 	} else {
 		var bookResponseDTO model.BookResponseDTO
 		copier.Copy(&bookResponseDTO, book)
@@ -112,7 +112,7 @@ func DeleteBook(c *gin.Context) {
 	var book entity.Book
 	id, _ := strconv.Atoi(c.Param("id"))
 	if err := repository.DeleteBook(&book, id); err != nil {
-		c.AbortWithStatus(http.StatusNotFound)
+		c.AbortWithStatusJSON(http.StatusNotFound, gin.H{"error": err.Error()})
 	} else {
 		c.Status(http.StatusOK)
 	}
