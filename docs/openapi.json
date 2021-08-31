@@ -1,1 +1,217 @@
-{"openapi":"3.0.1","info":{"contact":{}},"servers":[{"url":"/"}],"paths":{"/books":{"get":{"tags":["books"],"summary":"Get ooks","responses":{"200":{"description":"OK","content":{"*/*":{"schema":{"type":"array","items":{"$ref":"#/components/schemas/model.BookResponseDTO"}}}}}}},"post":{"tags":["books"],"summary":"Create Book","requestBody":{"description":"body","content":{"*/*":{"schema":{"$ref":"#/components/schemas/model.BookRequestDTO"}}},"required":false},"responses":{"200":{"description":"OK","content":{"*/*":{"schema":{"$ref":"#/components/schemas/model.BookResponseDTO"}}}}},"x-codegen-request-body-name":"body"}},"/books/{id}":{"get":{"tags":["books"],"summary":"Get the book by id","parameters":[{"name":"id","in":"path","description":"id","required":true,"schema":{"type":"string"}}],"responses":{"200":{"description":"OK","content":{"*/*":{"schema":{"$ref":"#/components/schemas/model.BookResponseDTO"}}}}}},"put":{"tags":["books"],"summary":"Update the book information","parameters":[{"name":"id","in":"path","description":"id","required":true,"schema":{"type":"string"}}],"requestBody":{"description":"body","content":{"*/*":{"schema":{"$ref":"#/components/schemas/model.BookRequestDTO"}}},"required":false},"responses":{"200":{"description":"OK","content":{"*/*":{"schema":{"$ref":"#/components/schemas/model.BookResponseDTO"}}}}},"x-codegen-request-body-name":"body"},"delete":{"tags":["books"],"summary":"Delete the book","parameters":[{"name":"id","in":"path","description":"id","required":true,"schema":{"type":"string"}}],"responses":{"200":{"description":"","content":{}}}}}},"components":{"schemas":{"model.BookRequestDTO":{"required":["author","publisher","title"],"type":"object","properties":{"author":{"type":"string","description":"book author","example":"David Wiesner"},"publisher":{"type":"string","description":"book publisher","example":"Clarion Books"},"title":{"type":"string","description":"book title","example":"The Three Pigs"}}},"model.BookResponseDTO":{"type":"object","properties":{"author":{"type":"string","description":"book author","example":"David Wiesner"},"id":{"type":"integer","description":"book id","example":1234},"publisher":{"type":"string","description":"book publisher","example":"Clarion Books"},"title":{"type":"string","description":"book title","example":"The Three Pigs"}}}}}}
+{
+    "openapi": "3.0.1",
+    "info": {
+        "contact": {},
+        "title": "mobile wallet",
+        "version": "1.0.0"
+    },
+    "servers": [
+        {
+            "url": "/"
+        }
+    ],
+    "paths": {
+        "/books": {
+            "get": {
+                "tags": [
+                    "books"
+                ],
+                "summary": "Get all books",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/model.BookResponseDTO"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "books"
+                ],
+                "summary": "Create Book",
+                "requestBody": {
+                    "description": "body",
+                    "content": {
+                        "*/*": {
+                            "schema": {
+                                "$ref": "#/components/schemas/model.BookRequestDTO"
+                            }
+                        }
+                    },
+                    "required": false
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/model.BookResponseDTO"
+                                }
+                            }
+                        }
+                    }
+                },
+                "x-codegen-request-body-name": "body"
+            }
+        },
+        "/books/{id}": {
+            "get": {
+                "tags": [
+                    "books"
+                ],
+                "summary": "Get the book by id",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "id",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/model.BookResponseDTO"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "books"
+                ],
+                "summary": "Update the book information",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "id",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "description": "body",
+                    "content": {
+                        "*/*": {
+                            "schema": {
+                                "$ref": "#/components/schemas/model.BookRequestDTO"
+                            }
+                        }
+                    },
+                    "required": false
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/model.BookResponseDTO"
+                                }
+                            }
+                        }
+                    }
+                },
+                "x-codegen-request-body-name": "body"
+            },
+            "delete": {
+                "tags": [
+                    "books"
+                ],
+                "summary": "Delete the book",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "id",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "content": {}
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "model.BookRequestDTO": {
+                "required": [
+                    "author",
+                    "publisher",
+                    "title"
+                ],
+                "type": "object",
+                "properties": {
+                    "author": {
+                        "type": "string",
+                        "description": "book author",
+                        "example": "David Wiesner"
+                    },
+                    "publisher": {
+                        "type": "string",
+                        "description": "book publisher",
+                        "example": "Clarion Books"
+                    },
+                    "title": {
+                        "type": "string",
+                        "description": "book title",
+                        "example": "The Three Pigs"
+                    }
+                }
+            },
+            "model.BookResponseDTO": {
+                "type": "object",
+                "properties": {
+                    "author": {
+                        "type": "string",
+                        "description": "book author",
+                        "example": "David Wiesner"
+                    },
+                    "id": {
+                        "type": "integer",
+                        "description": "book id",
+                        "example": 1234
+                    },
+                    "publisher": {
+                        "type": "string",
+                        "description": "book publisher",
+                        "example": "Clarion Books"
+                    },
+                    "title": {
+                        "type": "string",
+                        "description": "book title",
+                        "example": "The Three Pigs"
+                    }
+                }
+            }
+        }
+    }
+}
