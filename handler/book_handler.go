@@ -1,9 +1,9 @@
 package handler
 
 import (
-	"github.com/airoasis/go-rest-project/model"
-	"github.com/airoasis/go-rest-project/model/entity"
-	"github.com/airoasis/go-rest-project/repository"
+	"github.com/sktston/go-rest-project/model"
+	"github.com/sktston/go-rest-project/model/entity"
+	"github.com/sktston/go-rest-project/repository"
 	"github.com/gin-gonic/gin"
 	"github.com/jinzhu/copier"
 	"github.com/rs/zerolog/log"

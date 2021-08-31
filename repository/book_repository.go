@@ -1,8 +1,8 @@
 package repository
 
 import (
-	"github.com/airoasis/go-rest-project/config"
-	"github.com/airoasis/go-rest-project/model/entity"
+	"github.com/sktston/go-rest-project/config"
+	"github.com/sktston/go-rest-project/model/entity"
 )
 
 //GetAllBooks Fetch all book data

@@ -1,12 +1,12 @@
 package main
 
 import (
-	"github.com/airoasis/go-rest-project/config"
-	"github.com/airoasis/go-rest-project/docs"
-	"github.com/airoasis/go-rest-project/router"
 	"github.com/gin-gonic/gin"
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
+	"github.com/sktston/go-rest-project/config"
+	"github.com/sktston/go-rest-project/docs"
+	"github.com/sktston/go-rest-project/router"
 	"github.com/spf13/viper"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"

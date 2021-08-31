@@ -2,7 +2,7 @@ package config
 
 import (
 	"fmt"
-	"github.com/airoasis/go-rest-project/model/entity"
+	"github.com/sktston/go-rest-project/model/entity"
 	"github.com/spf13/viper"
 	"gorm.io/gorm"
 )

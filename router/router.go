@@ -1,8 +1,8 @@
 package router
 
 import (
-	_ "github.com/airoasis/go-rest-project/docs"
-	"github.com/airoasis/go-rest-project/handler"
+	_ "github.com/sktston/go-rest-project/docs"
+	"github.com/sktston/go-rest-project/handler"
 	"github.com/gin-contrib/logger"
 	"github.com/gin-gonic/gin"
 	"github.com/heptiolabs/healthcheck"
