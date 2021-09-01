@@ -1,12 +1,12 @@
 package router
 
 import (
-	_ "github.com/sktston/go-rest-project/docs"
-	"github.com/sktston/go-rest-project/handler"
 	"github.com/gin-contrib/logger"
 	"github.com/gin-gonic/gin"
 	"github.com/heptiolabs/healthcheck"
 	"github.com/rs/zerolog"
+	_ "github.com/sktston/go-rest-project/docs"
+	"github.com/sktston/go-rest-project/handler"
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
 	"os"
@@ -37,8 +37,7 @@ func SetupRouter() *gin.Engine {
 	}
 
 	// Swagger
-	url := ginSwagger.URL("/swagger/doc.json")
-	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler, url))
+	r.GET("/swagger/*any", ginSwagger.DisablingWrapHandler(swaggerFiles.Handler, "SWAGGER_DISABLE"))
 
 	return r
 }
