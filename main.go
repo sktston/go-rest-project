@@ -5,7 +5,6 @@ import (
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
 	"github.com/sktston/go-rest-project/config"
-	"github.com/sktston/go-rest-project/docs"
 	"github.com/sktston/go-rest-project/router"
 	"github.com/spf13/viper"
 	"gorm.io/driver/postgres"
@@ -14,12 +13,9 @@ import (
 	"time"
 )
 
+// @title Go Rest Project API
+// @version 0.1.0
 func main() {
-	// swagger description
-	// See: https://github.com/swaggo/swag#how-to-use-it-with-gin
-	docs.SwaggerInfo.Title = "Go Rest Project API"
-	docs.SwaggerInfo.Version = "0.1.0"
-
 	//Set a logger with zerolog
 	zerolog.SetGlobalLevel(zerolog.InfoLevel)
 	if gin.IsDebugging() {
