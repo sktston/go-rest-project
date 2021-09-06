@@ -23,5 +23,10 @@ jobs:
     - name: Get Swag binary
       run: wget https://github.com/swaggo/swag/releases/download/v1.7.1/swag_linux_amd64.tar.gz -O - | tar -xz -C /tmp && cp /tmp/swag_linux_amd64/swag /usr/local/bin
 
-    - name: Generate documantesion
+    - name: Generate Swagger doc
       run: make docs
+      
+    - name: Convert to Openapi 3.0
+      run: |
+        cd docs
+        curl -X POST -H "Content-Type: application/json" -d "@swagger.json" https://converter.swagger.io/api/convert -o openapi.json
