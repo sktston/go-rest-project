@@ -31,5 +31,5 @@ jobs:
         cd docs
         curl -X POST -H "Content-Type: application/json" -d "@swagger.json" https://converter.swagger.io/api/convert -o openapi.json
         export SCRIPT=$(jq -Rs '.' openapi.json)
-        $echo SCRIPT
+        echo $SCRIPT
         
