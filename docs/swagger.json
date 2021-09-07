@@ -1,7 +1,9 @@
 {
     "swagger": "2.0",
     "info": {
-        "contact": {}
+        "title": "Go Rest Project API",
+        "contact": {},
+        "version": "0.1.0"
     },
     "paths": {
         "/books": {

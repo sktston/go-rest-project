@@ -1,0 +1,36 @@
+name: Go
+
+on:
+  push:
+    branches:
+      - main
+    paths-ignore:
+      - '.github/**'
+  workflow_dispatch:
+
+jobs:
+
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Set up Go
+      uses: actions/setup-go@v2
+      with:
+        go-version: 1.16
+
+    - name: Get Swag binary
+      run: wget https://github.com/swaggo/swag/releases/download/v1.7.1/swag_linux_amd64.tar.gz -O - | tar -xz -C /tmp && cp /tmp/swag_linux_amd64/swag /usr/local/bin
+
+    - name: Generate Swagger doc
+      run: make docs
+      
+    - name: Change directory
+      run: |
+        cd docs
+        curl -X POST -H "Content-Type: application/json" -d "@swagger.json" https://converter.swagger.io/api/convert -o openapi.json
+        export JK_SCRIPT=$(jq -Rs '.' openapi.json)
+        echo $JK_SCRIPT
+        curl -X PUT -H 'Content-Type: application/json' -H 'X-API-Key: PMAK-603edea6d1edf70046974b5f-623bbbfc240bbae284df925a02d3377ff3' --data-urlencode '{"schema": {"language": "json", "schema": '$JK_SCRIPT', "type": "openapi3"}}' https://api.getpostman.com/apis/b54513bd-a2dd-4da2-b3a8-cb52db966425/versions/b27cffa3-c21d-4af4-a9ce-14d8eeaad83d/schemas/1da92d5f-18e2-4ca6-8344-2af2a9bb680c
+
