@@ -38,7 +38,7 @@ jobs:
           --data-raw '{
             "schema": {
               "language": "json",
-              "schema": \"'$SCHEMA'\",
+              "schema": '$SCHEMA',
               "type": "openapi3"
             }
           }'
