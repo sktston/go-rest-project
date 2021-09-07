@@ -32,14 +32,7 @@ jobs:
         curl -X POST -H "Content-Type: application/json" -d "@swagger.json" https://converter.swagger.io/api/convert -o openapi.json
         export SCHEMA=$(jq -Rs '.' openapi.json)
         echo $SCHEMA
-        curl --location --request PUT 'https://api.getpostman.com/apis/b54513bd-a2dd-4da2-b3a8-cb52db966425/versions/b27cffa3-c21d-4af4-a9ce-14d8eeaad83d/schemas/1da92d5f-18e2-4ca6-8344-2af2a9bb680c' \
-          --header 'Content-Type: application/json' \
-          --header 'X-API-Key: ${{ secrets.POSTMAN_API_KEY }}' \
-          --data-raw '{
-            "schema": {
-              "language": "json",
-              "schema": '$SCHEMA',
-              "type": "openapi3"
-            }
-          }'
-
+        curl -X PUT https://api.getpostman.com/apis/b54513bd-a2dd-4da2-b3a8-cb52db966425/versions/b27cffa3-c21d-4af4-a9ce-14d8eeaad83d/schemas/1da92d5f-18e2-4ca6-8344-2af2a9bb680c \
+        --header 'Ceontent-Type: application/json' \
+        --header 'X-API-Key: ${{ secretes.POSTMAN_API_KEY}}' \
+        --data-raw '{"schema": {"language": "json", "schema": '$SCHEMA', "type": "openapi3"}}'
