@@ -26,7 +26,7 @@ jobs:
     - name: Generate Swagger doc
       run: make docs
       
-    - name: Change directory
+    - name: Update Postman schema & documentation
       run: |
         cd docs
         curl -X POST -H "Content-Type: application/json" -d "@swagger.json" https://converter.swagger.io/api/convert -o openapi.json
