@@ -22,7 +22,7 @@ func GetBooks(c *gin.Context) {
 		c.AbortWithStatusJSON(http.StatusNotFound, gin.H{"error": err.Error()})
 	} else {
 		var bookResponseDTOs []model.BookResponseDTO
-		copier.Copy(&bookResponseDTOs, books)  
+		copier.Copy(&bookResponseDTOs, books)
 		c.JSON(http.StatusOK, bookResponseDTOs)
 	}
 }
