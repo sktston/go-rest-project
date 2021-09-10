@@ -44,6 +44,10 @@ info:
 paths:
   /books:
     get:
+      consumes:
+      - application/json
+      produces:
+      - application/json
       responses:
         "200":
           description: OK
@@ -55,12 +59,16 @@ paths:
       tags:
       - books
     post:
+      consumes:
+      - application/json
       parameters:
       - description: body
         in: body
         name: body
         schema:
           $ref: '#/definitions/model.BookRequestDTO'
+      produces:
+      - application/json
       responses:
         "200":
           description: OK
@@ -71,12 +79,16 @@ paths:
       - books
   /books/{id}:
     delete:
+      consumes:
+      - application/json
       parameters:
       - description: id
         in: path
         name: id
         required: true
         type: string
+      produces:
+      - application/json
       responses:
         "200":
           description: ""
@@ -84,12 +96,16 @@ paths:
       tags:
       - books
     get:
+      consumes:
+      - application/json
       parameters:
       - description: id
         in: path
         name: id
         required: true
         type: string
+      produces:
+      - application/json
       responses:
         "200":
           description: OK
@@ -99,6 +115,8 @@ paths:
       tags:
       - books
     put:
+      consumes:
+      - application/json
       parameters:
       - description: id
         in: path
@@ -110,6 +128,8 @@ paths:
         name: body
         schema:
           $ref: '#/definitions/model.BookRequestDTO'
+      produces:
+      - application/json
       responses:
         "200":
           description: OK

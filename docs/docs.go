@@ -26,6 +26,12 @@ var doc = `{
     "paths": {
         "/books": {
             "get": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
                 "tags": [
                     "books"
                 ],
@@ -43,6 +49,12 @@ var doc = `{
                 }
             },
             "post": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
                 "tags": [
                     "books"
                 ],
@@ -69,6 +81,12 @@ var doc = `{
         },
         "/books/{id}": {
             "get": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
                 "tags": [
                     "books"
                 ],
@@ -92,6 +110,12 @@ var doc = `{
                 }
             },
             "put": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
                 "tags": [
                     "books"
                 ],
@@ -123,6 +147,12 @@ var doc = `{
                 }
             },
             "delete": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
                 "tags": [
                     "books"
                 ],

@@ -8,6 +8,12 @@
     "paths": {
         "/books": {
             "get": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
                 "tags": [
                     "books"
                 ],
@@ -25,6 +31,12 @@
                 }
             },
             "post": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
                 "tags": [
                     "books"
                 ],
@@ -51,6 +63,12 @@
         },
         "/books/{id}": {
             "get": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
                 "tags": [
                     "books"
                 ],
@@ -74,6 +92,12 @@
                 }
             },
             "put": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
                 "tags": [
                     "books"
                 ],
@@ -105,6 +129,12 @@
                 }
             },
             "delete": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
                 "tags": [
                     "books"
                 ],
