@@ -14,6 +14,8 @@ import (
 // GetBooks godoc
 // @Summary Get all books
 // @Tags books
+// @Accept json
+// @Produce json
 // @Success 200 {object} []model.BookResponseDTO
 // @Router /books [get]
 func GetBooks(c *gin.Context) {
@@ -30,6 +32,8 @@ func GetBooks(c *gin.Context) {
 // CreateBook godoc
 // @Summary Create Book
 // @Tags books
+// @Accept json
+// @Produce json
 // @Param body body model.BookRequestDTO false "body"
 // @Success 200 {object} model.BookResponseDTO
 // @Router /books [post]
@@ -55,6 +59,8 @@ func CreateBook(c *gin.Context) {
 // GetBookByID godoc
 // @Summary Get the book by id
 // @Tags books
+// @Accept json
+// @Produce json
 // @Param id path string true "id"
 // @Success 200 {object} model.BookResponseDTO
 // @Router /books/{id} [get]
@@ -73,6 +79,8 @@ func GetBookByID(c *gin.Context) {
 // UpdateBook godoc
 // @Summary Update the book information
 // @Tags books
+// @Accept json
+// @Produce json
 // @Param id path string true "id"
 // @Param body body model.BookRequestDTO false "body"
 // @Success 200 {object} model.BookResponseDTO
@@ -105,6 +113,8 @@ func UpdateBook(c *gin.Context) {
 // DeleteBook godoc
 // @Summary Delete the book
 // @Tags books
+// @Accept json
+// @Produce json
 // @Param id path string true "id"
 // @Success 200
 // @Router /books/{id} [delete]

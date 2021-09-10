@@ -2,9 +2,6 @@
 # Created by https://www.toptal.com/developers/gitignore/api/macos,windows,go,visualstudiocode
 # Edit at https://www.toptal.com/developers/gitignore?templates=macos,windows,go,visualstudiocode
 
-# swaggo files
-docs/**
-
 ### Go ###
 # Binaries for programs and plugins
 *.exe

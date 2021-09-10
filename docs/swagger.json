@@ -1,0 +1,181 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "title": "Go Rest Project API",
+        "contact": {},
+        "version": "0.1.0"
+    },
+    "paths": {
+        "/books": {
+            "get": {
+                "tags": [
+                    "books"
+                ],
+                "summary": "Get all books",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/model.BookResponseDTO"
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "books"
+                ],
+                "summary": "Create Book",
+                "parameters": [
+                    {
+                        "description": "body",
+                        "name": "body",
+                        "in": "body",
+                        "schema": {
+                            "$ref": "#/definitions/model.BookRequestDTO"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/model.BookResponseDTO"
+                        }
+                    }
+                }
+            }
+        },
+        "/books/{id}": {
+            "get": {
+                "tags": [
+                    "books"
+                ],
+                "summary": "Get the book by id",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/model.BookResponseDTO"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "books"
+                ],
+                "summary": "Update the book information",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "body",
+                        "name": "body",
+                        "in": "body",
+                        "schema": {
+                            "$ref": "#/definitions/model.BookRequestDTO"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/model.BookResponseDTO"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "books"
+                ],
+                "summary": "Delete the book",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": ""
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "model.BookRequestDTO": {
+            "type": "object",
+            "required": [
+                "author",
+                "publisher",
+                "title"
+            ],
+            "properties": {
+                "author": {
+                    "description": "book author",
+                    "type": "string",
+                    "example": "David Wiesner"
+                },
+                "publisher": {
+                    "description": "book publisher",
+                    "type": "string",
+                    "example": "Clarion Books"
+                },
+                "title": {
+                    "description": "book title",
+                    "type": "string",
+                    "example": "The Three Pigs"
+                }
+            }
+        },
+        "model.BookResponseDTO": {
+            "type": "object",
+            "properties": {
+                "author": {
+                    "description": "book author",
+                    "type": "string",
+                    "example": "David Wiesner"
+                },
+                "id": {
+                    "description": "book id",
+                    "type": "integer",
+                    "example": 1234
+                },
+                "publisher": {
+                    "description": "book publisher",
+                    "type": "string",
+                    "example": "Clarion Books"
+                },
+                "title": {
+                    "description": "book title",
+                    "type": "string",
+                    "example": "The Three Pigs"
+                }
+            }
+        }
+    }
+}
