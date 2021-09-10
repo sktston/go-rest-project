@@ -1,4 +1,4 @@
-name: golangci-lint
+name: Pull Request Checks
 
 on:
   push:
@@ -16,6 +16,12 @@ jobs:
     steps:
     - name: Checkout source code
       uses: actions/checkout@v2
+
+    - name: golangci-lint
+      uses: golangci/golangci-lint-action@v2
+      with:
+        # Optional: version of golangci-lint to use in form of v1.2 or v1.2.3 or `latest` to use the latest version
+        version: latest
 
     - name: Set up Go
       uses: actions/setup-go@v2
