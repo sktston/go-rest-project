@@ -3,6 +3,7 @@ module github.com/sktston/go-rest-project
 go 1.16
 
 require (
+	github.com/alecthomas/template v0.0.0-20190718012654-fb15b899a751
 	github.com/gin-contrib/logger v0.2.0
 	github.com/gin-gonic/gin v1.7.4
 	github.com/heptiolabs/healthcheck v0.0.0-20180807145615-6ff867650f40

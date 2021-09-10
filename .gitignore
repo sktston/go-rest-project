@@ -3,7 +3,7 @@
 # Edit at https://www.toptal.com/developers/gitignore?templates=macos,windows,go,visualstudiocode
 
 # swaggo files
-docs/
+docs/**
 
 ### Go ###
 # Binaries for programs and plugins
