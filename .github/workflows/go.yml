@@ -23,13 +23,13 @@ jobs:
         # Optional: version of golangci-lint to use in form of v1.2 or v1.2.3 or `latest` to use the latest version
         version: latest
 
-    - name: Set up Go
-      uses: actions/setup-go@v2
-      with:
-        go-version: 1.16
-
-    - name: Build
-      id: generate-swaager-docs
-      run: |
-        wget https://github.com/swaggo/swag/releases/download/v1.7.1/swag_linux_amd64.tar.gz -O - | tar -xz -C /tmp && cp /tmp/swag_linux_amd64/swag /usr/local/bin
-        make build
+#    - name: Set up Go
+#      uses: actions/setup-go@v2
+#      with:
+#        go-version: 1.16
+#
+#    - name: Build
+#      id: generate-swaager-docs
+#      run: |
+#        wget https://github.com/swaggo/swag/releases/download/v1.7.1/swag_linux_amd64.tar.gz -O - | tar -xz -C /tmp && cp /tmp/swag_linux_amd64/swag /usr/local/bin
+#        make build
