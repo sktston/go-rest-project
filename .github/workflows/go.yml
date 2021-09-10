@@ -10,6 +10,24 @@ on:
   workflow_dispatch:
 
 jobs:
+  build:
+    runs-on: ubuntu-20.04
+
+    steps:
+    - name: Checkout source code
+      uses: actions/checkout@v2
+
+    - name: Set up Go
+      uses: actions/setup-go@v2
+      with:
+        go-version: 1.16
+
+    - name: Build
+      id: go-build
+      run: |
+        wget https://github.com/swaggo/swag/releases/download/v1.7.1/swag_linux_amd64.tar.gz -O - | tar -xz -C /tmp && cp /tmp/swag_linux_amd64/swag /usr/local/bin
+        make build
+
   golangci-lint:
     runs-on: ubuntu-20.04
 
