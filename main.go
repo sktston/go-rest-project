@@ -7,8 +7,6 @@ import (
 	"github.com/sktston/go-rest-project/config"
 	"github.com/sktston/go-rest-project/router"
 	"github.com/spf13/viper"
-	"gorm.io/driver/postgres"
-	"gorm.io/gorm"
 	"os"
 	"time"
 )
@@ -30,16 +28,16 @@ func main() {
 	}
 
 	//Connect to DB
-	config.DB, err = gorm.Open(postgres.Open(config.GetDSN()), &gorm.Config{})
+	err = config.InitDB()
 	if err != nil {
-		log.Fatal().Msgf("Status: %v", err)
+		log.Fatal().Err(err).Caller().Msgf("cannot connect DB")
 	}
-
-	//Migrate the schema (Create the book table)
-	config.MigrateSchema()
 
 	//Start the gin server
 	log.Info().Msgf("Starting the server")
 	r := router.SetupRouter()
-	r.Run(":" + viper.GetString("server.port"))
+	err = r.Run(":" + viper.GetString("server.port"))
+	if err != nil {
+		log.Fatal().Err(err).Caller().Msgf("cannot run server")
+	}
 }
