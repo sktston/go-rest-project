@@ -13,6 +13,11 @@ import (
 var DB *gorm.DB
 var TestPrefix = "test_"
 
+func GetDB() *gorm.DB {
+	return DB
+}
+
+
 func InitDB() error {
 	// Connect to DB
 	dsn := fmt.Sprintf(
@@ -74,13 +79,14 @@ func MigrateSchema(db *gorm.DB) error {
 }
 
 func FreeTestDB() error {
+	db := GetDB()
 	// Check test DB
-	if DB.NamingStrategy.TableName("") != TestPrefix {
+	if db.NamingStrategy.TableName("") != TestPrefix {
 		return errors.New("invalid db: current DB is not test DB")
 	}
 
 	// Drop tables
-	if err := DB.Migrator().DropTable(&entity.Book{}); err != nil {
+	if err := db.Migrator().DropTable(&entity.Book{}); err != nil {
 		return err
 	}
 	return nil

@@ -27,7 +27,7 @@ func main() {
 		log.Fatal().Msgf("cannot load config: %v", err)
 	}
 
-	//Connect to DB
+	//Connect to DB and Migrate Schema if not exist
 	err = config.InitDB()
 	if err != nil {
 		log.Fatal().Err(err).Caller().Msgf("cannot connect DB")
