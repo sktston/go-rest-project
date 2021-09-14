@@ -11,23 +11,6 @@ import (
 	"strconv"
 )
 
-// GetBooks godoc
-// @Summary Get all books
-// @Tags books
-// @Accept json
-// @Produce json
-// @Success 200 {object} []model.BookResponseDTO
-// @Router /books [get]
-func GetBooks(c *gin.Context) {
-	var books []entity.Book
-	if err := repository.GetAllBooks(&books); err != nil {
-		c.AbortWithStatusJSON(http.StatusNotFound, gin.H{"error": err.Error()})
-	} else {
-		var bookResponseDTOs []model.BookResponseDTO
-		copier.Copy(&bookResponseDTOs, books)
-		c.JSON(http.StatusOK, bookResponseDTOs)
-	}
-}
 
 // CreateBook godoc
 // @Summary Create Book
@@ -45,14 +28,41 @@ func CreateBook(c *gin.Context) {
 	}
 
 	var book entity.Book
-	copier.Copy(&book, bookDTO)
+	if err := copier.Copy(&book, bookDTO); err != nil {
+		log.Error().Err(err).Msg("")
+		c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+	}
 	if err := repository.CreateBook(&book); err != nil {
 		log.Error().Err(err).Msg("ERROR creating book data")
 		c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 	} else {
 		var bookResponseDTO model.BookResponseDTO
-		copier.Copy(&bookResponseDTO, book)
+		if err := copier.Copy(&bookResponseDTO, book); err != nil {
+			log.Error().Err(err).Msg("")
+			c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		}
 		c.JSON(http.StatusOK, bookResponseDTO)
+	}
+}
+
+// GetBooks godoc
+// @Summary Get all books
+// @Tags books
+// @Accept json
+// @Produce json
+// @Success 200 {object} []model.BookResponseDTO
+// @Router /books [get]
+func GetBooks(c *gin.Context) {
+	var books []entity.Book
+	if err := repository.GetAllBooks(&books); err != nil {
+		c.AbortWithStatusJSON(http.StatusNotFound, gin.H{"error": err.Error()})
+	} else {
+		var bookResponseDTOs []model.BookResponseDTO
+		if err := copier.Copy(&bookResponseDTOs, books); err != nil {
+			log.Error().Err(err).Msg("")
+			c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		}
+		c.JSON(http.StatusOK, bookResponseDTOs)
 	}
 }
 
@@ -71,7 +81,10 @@ func GetBookByID(c *gin.Context) {
 		c.AbortWithStatusJSON(http.StatusNotFound, gin.H{"error": err.Error()})
 	} else {
 		var bookResponseDTO model.BookResponseDTO
-		copier.Copy(&bookResponseDTO, book)
+		if err := copier.Copy(&bookResponseDTO, book); err != nil {
+			log.Error().Err(err).Msg("")
+			c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		}
 		c.JSON(http.StatusOK, bookResponseDTO)
 	}
 }
@@ -99,12 +112,18 @@ func UpdateBook(c *gin.Context) {
 		return
 	}
 
-	copier.Copy(&book, bookRequestDTO)
+	if err := copier.Copy(&book, bookRequestDTO); err != nil {
+		log.Error().Err(err).Msg("")
+		c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+	}
 	if err := repository.UpdateBook(&book); err != nil {
 		c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 	} else {
 		var bookResponseDTO model.BookResponseDTO
-		copier.Copy(&bookResponseDTO, book)
+		if err := copier.Copy(&bookResponseDTO, book); err != nil {
+			log.Error().Err(err).Msg("")
+			c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		}
 		c.JSON(http.StatusOK, bookResponseDTO)
 	}
 }
