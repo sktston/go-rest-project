@@ -21,8 +21,8 @@ func SetupRouter() *gin.Engine {
 	r.Use(logger.SetLogger(logger.WithWriter(zerolog.ConsoleWriter{Out:os.Stderr,TimeFormat: time.RFC3339})))
 
 	// Books
-	r.GET("/books", handler.GetBooks)
 	r.POST("/books", handler.CreateBook)
+	r.GET("/books", handler.GetBooks)
 	r.GET("/books/:id", handler.GetBookByID)
 	r.PUT("/books/:id", handler.UpdateBook)
 	r.DELETE("/books/:id", handler.DeleteBook)

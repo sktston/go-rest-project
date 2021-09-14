@@ -5,17 +5,17 @@ import (
 	"github.com/sktston/go-rest-project/model/entity"
 )
 
-//GetAllBooks Fetch all book data
-func GetAllBooks(book *[]entity.Book) (err error) {
-	if err = config.DB.Find(book).Error; err != nil {
+//CreateBook ... Insert New data
+func CreateBook(book *entity.Book) (err error) {
+	if err = config.DB.Create(book).Error; err != nil {
 		return err
 	}
 	return nil
 }
 
-//CreateBook ... Insert New data
-func CreateBook(book *entity.Book) (err error) {
-	if err = config.DB.Create(book).Error; err != nil {
+//GetAllBooks Fetch all book data
+func GetAllBooks(book *[]entity.Book) (err error) {
+	if err = config.DB.Find(book).Error; err != nil {
 		return err
 	}
 	return nil
