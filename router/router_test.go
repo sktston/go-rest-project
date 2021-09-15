@@ -6,6 +6,7 @@ import (
 	"github.com/stretchr/testify/assert"
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
+	"net/http"
 	"net/http/httptest"
 	"testing"
 )
@@ -16,11 +17,11 @@ func TestHealthLive(t *testing.T) {
 	r := gin.New()
 	r.GET("/health/live", gin.WrapF(health.LiveEndpoint))
 
-	req := httptest.NewRequest("GET", "/health/live", nil)
+	req := httptest.NewRequest(http.MethodGet, "/health/live", nil)
 	w := httptest.NewRecorder()
 	r.ServeHTTP(w, req)
 
-	assert.Equal(t, 200, w.Code)
+	assert.Equal(t, http.StatusOK, w.Code)
 }
 
 func TestHealthReady(t *testing.T) {
@@ -29,11 +30,11 @@ func TestHealthReady(t *testing.T) {
 	r := gin.New()
 	r.GET("/health/ready", gin.WrapF(health.ReadyEndpoint))
 
-	req := httptest.NewRequest("GET", "/health/ready", nil)
+	req := httptest.NewRequest(http.MethodGet, "/health/ready", nil)
 	w := httptest.NewRecorder()
 	r.ServeHTTP(w, req)
 
-	assert.Equal(t, 200, w.Code)
+	assert.Equal(t, http.StatusOK, w.Code)
 }
 
 func TestSwaggerDoc(t *testing.T) {
@@ -41,9 +42,9 @@ func TestSwaggerDoc(t *testing.T) {
 	r := gin.New()
 	r.GET("/swagger/*any", ginSwagger.DisablingWrapHandler(swaggerFiles.Handler, "SWAGGER_DISABLE"))
 
-	req := httptest.NewRequest("GET", "/swagger/doc.json", nil)
+	req := httptest.NewRequest(http.MethodGet, "/swagger/doc.json", nil)
 	w := httptest.NewRecorder()
 	r.ServeHTTP(w, req)
 
-	assert.Equal(t, 200, w.Code)
+	assert.Equal(t, http.StatusOK, w.Code)
 }

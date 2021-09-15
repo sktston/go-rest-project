@@ -20,49 +20,50 @@ func leave(t *testing.T) {
 	assert.NoError(t, err)
 }
 
-var testBooks = []entity.Book{
-	{Title: "TestTitleA", Author: "TestAuthorA", Publisher: "TestPublisherA" },
-	{Title: "TestTitleB", Author: "TestAuthorB", Publisher: "TestPublisherB" },
+func getTestBookList() []entity.Book {
+	return []entity.Book{
+		{Title: "TestTitleA", Author: "TestAuthorA", Publisher: "TestPublisherA" },
+		{Title: "TestTitleB", Author: "TestAuthorB", Publisher: "TestPublisherB" },
+	}
 }
 
 func TestCreateBook(t *testing.T) {
 	enter(t)
+	defer leave(t)
 
-	for _, testBook := range testBooks {
+	for _, testBook := range getTestBookList() {
 		err := CreateBook(&testBook)
 		assert.NoError(t, err)
 	}
-
-	leave(t)
 }
 
 func TestGetAllBooks(t *testing.T) {
 	enter(t)
+	defer leave(t)
 
-	for _, testBook := range testBooks {
+	for _, testBook := range getTestBookList() {
 		err := CreateBook(&testBook)
 		assert.NoError(t, err)
 	}
 
 	var books []entity.Book
-	err := GetAllBooks(&books)
+	err := GetBookList(&books)
 	assert.NoError(t, err)
 
-	assert.Len(t, books, len(testBooks))
+	assert.Len(t, books, len(getTestBookList()))
 
 	for i, book := range books {
-		assert.Equal(t, testBooks[i].Title, book.Title)
-		assert.Equal(t, testBooks[i].Author, book.Author)
-		assert.Equal(t, testBooks[i].Publisher, book.Publisher)
+		assert.Equal(t, getTestBookList()[i].Title, book.Title)
+		assert.Equal(t, getTestBookList()[i].Author, book.Author)
+		assert.Equal(t, getTestBookList()[i].Publisher, book.Publisher)
 	}
-
-	leave(t)
 }
 
 func TestGetBookByID(t *testing.T) {
 	enter(t)
+	defer leave(t)
 
-	for _, testBook := range testBooks {
+	for _, testBook := range getTestBookList() {
 		err := CreateBook(&testBook)
 		assert.NoError(t, err)
 	}
@@ -71,18 +72,18 @@ func TestGetBookByID(t *testing.T) {
 	err := GetBookByID(&book, 1)
 	assert.NoError(t, err)
 
-	assert.Equal(t, testBooks[0].Title, book.Title)
-	assert.Equal(t, testBooks[0].Author, book.Author)
-	assert.Equal(t, testBooks[0].Publisher, book.Publisher)
-
-	leave(t)
+	assert.Equal(t, getTestBookList()[0].Title, book.Title)
+	assert.Equal(t, getTestBookList()[0].Author, book.Author)
+	assert.Equal(t, getTestBookList()[0].Publisher, book.Publisher)
 }
 
 func TestUpdateBook(t *testing.T) {
 	enter(t)
+	defer leave(t)
+
 	testBookC := entity.Book{Title: "TestTitleC", Author: "TestAuthorC", Publisher: "TestPublisherC" }
 
-	for _, testBook := range testBooks {
+	for _, testBook := range getTestBookList() {
 		err := CreateBook(&testBook)
 		assert.NoError(t, err)
 	}
@@ -104,14 +105,13 @@ func TestUpdateBook(t *testing.T) {
 	assert.Equal(t, testBookC.Title, book.Title)
 	assert.Equal(t, testBookC.Author, book.Author)
 	assert.Equal(t, testBookC.Publisher, book.Publisher)
-
-	leave(t)
 }
 
 func TestDeleteBook(t *testing.T) {
 	enter(t)
+	defer leave(t)
 
-	for _, testBook := range testBooks {
+	for _, testBook := range getTestBookList() {
 		err := CreateBook(&testBook)
 		assert.NoError(t, err)
 	}
@@ -124,10 +124,8 @@ func TestDeleteBook(t *testing.T) {
 	assert.Error(t, err)
 
 	var books []entity.Book
-	err = GetAllBooks(&books)
+	err = GetBookList(&books)
 	assert.NoError(t, err)
 
-	assert.Len(t, books, len(testBooks)-1)
-
-	leave(t)
+	assert.Len(t, books, len(getTestBookList())-1)
 }

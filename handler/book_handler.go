@@ -45,24 +45,24 @@ func CreateBook(c *gin.Context) {
 	}
 }
 
-// GetBooks godoc
+// GetBookList godoc
 // @Summary Get all books
 // @Tags books
 // @Accept json
 // @Produce json
 // @Success 200 {object} []model.BookResponseDTO
 // @Router /books [get]
-func GetBooks(c *gin.Context) {
+func GetBookList(c *gin.Context) {
 	var books []entity.Book
-	if err := repository.GetAllBooks(&books); err != nil {
+	if err := repository.GetBookList(&books); err != nil {
 		c.AbortWithStatusJSON(http.StatusNotFound, gin.H{"error": err.Error()})
 	} else {
-		var bookResponseDTOs []model.BookResponseDTO
-		if err := copier.Copy(&bookResponseDTOs, books); err != nil {
+		var bookResponseDTOList []model.BookResponseDTO
+		if err := copier.Copy(&bookResponseDTOList, books); err != nil {
 			log.Error().Err(err).Msg("")
 			c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		}
-		c.JSON(http.StatusOK, bookResponseDTOs)
+		c.JSON(http.StatusOK, bookResponseDTOList)
 	}
 }
 

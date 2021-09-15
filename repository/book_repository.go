@@ -13,8 +13,8 @@ func CreateBook(book *entity.Book) (err error) {
 	return nil
 }
 
-//GetAllBooks Fetch all book data
-func GetAllBooks(book *[]entity.Book) (err error) {
+//GetBookList Fetch all book data
+func GetBookList(book *[]entity.Book) (err error) {
 	if err = config.DB.Find(book).Error; err != nil {
 		return err
 	}
