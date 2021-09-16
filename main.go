@@ -22,22 +22,19 @@ func main() {
 	log.Logger = log.Output(zerolog.ConsoleWriter{Out:os.Stderr,TimeFormat: time.RFC3339})
 
 	//Load application config
-	err := config.LoadConfig()
-	if err != nil {
+	if err := config.LoadConfig(); err != nil {
 		log.Fatal().Msgf("cannot load config: %v", err)
 	}
 
 	//Connect to DB and Migrate Schema if not exist
-	err = config.InitDB()
-	if err != nil {
+	if err := config.InitDB(); err != nil {
 		log.Fatal().Err(err).Caller().Msgf("cannot connect DB")
 	}
 
 	//Start the gin server
 	log.Info().Msgf("Starting the server")
 	r := router.SetupRouter()
-	err = r.Run(":" + viper.GetString("server.port"))
-	if err != nil {
+	if err := r.Run(":" + viper.GetString("server.port")); err != nil {
 		log.Fatal().Err(err).Caller().Msgf("cannot run server")
 	}
 }

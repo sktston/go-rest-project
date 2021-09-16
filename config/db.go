@@ -29,8 +29,7 @@ func InitDB() error {
 	}
 
 	// Migrate the schema (Create the book table)
-	err = MigrateSchema(db)
-	if err != nil {
+	if err := MigrateSchema(db); err != nil {
 		return err
 	}
 
@@ -67,9 +66,8 @@ func InitTestDB() (*gorm.DB, error) {
 		return nil, err
 	}
 
-	// Migrate the schema (Create the book table)
-	err = MigrateSchema(testDB)
-	if err != nil {
+	// Migrate the schema
+	if err := MigrateSchema(testDB); err != nil {
 		return nil, err
 	}
 
