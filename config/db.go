@@ -7,6 +7,7 @@ import (
 	"github.com/spf13/viper"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
+	"gorm.io/gorm/logger"
 	"gorm.io/gorm/schema"
 )
 
@@ -47,23 +48,24 @@ func InitTestDB() (*gorm.DB, error) {
 		viper.GetString("test-database.dbname"),
 		viper.GetInt("test-database.port"),
 	)
-	testDb, err := gorm.Open(postgres.Open(testDsn), &gorm.Config{
+	testDB, err := gorm.Open(postgres.Open(testDsn), &gorm.Config{
 		NamingStrategy: schema.NamingStrategy{
 			TablePrefix: testDBPrefix, // prefix is testId_
 		},
+		Logger: logger.Default.LogMode(logger.Silent),
 	})
 	if err != nil {
 		return nil, err
 	}
 
 	// Migrate the schema (Create the book table)
-	err = MigrateSchema(testDb)
+	err = MigrateSchema(testDB)
 	if err != nil {
 		return nil, err
 	}
 
-	DB = testDb
-	return testDb, nil
+	DB = testDB
+	return testDB, nil
 }
 
 func MigrateSchema(db *gorm.DB) error {
