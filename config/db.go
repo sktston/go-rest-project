@@ -38,6 +38,15 @@ func InitDB() error {
 	return nil
 }
 
+func MigrateSchema(db *gorm.DB) error {
+	if err := db.AutoMigrate(&entity.Book{}); err != nil {
+		return err
+	}
+	return nil
+}
+
+// Belows are for unit testing
+
 func InitTestDB() (*gorm.DB, error) {
 	testDBPrefix := uuid.New().String()+"_"
 	testDsn := fmt.Sprintf(
@@ -66,13 +75,6 @@ func InitTestDB() (*gorm.DB, error) {
 
 	DB = testDB
 	return testDB, nil
-}
-
-func MigrateSchema(db *gorm.DB) error {
-	if err := db.AutoMigrate(&entity.Book{}); err != nil {
-		return err
-	}
-	return nil
 }
 
 func FreeTestDB(testDB *gorm.DB) error {
