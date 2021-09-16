@@ -13,22 +13,25 @@ import (
 	"testing"
 )
 
+const (
+	testBodyA = `{
+		"title": "TestTitleA",
+		"author": "TestAuthorA",
+		"publisher": "TestPublisherA"
+	}`
+	testBodyB = `{
+		"title": "TestTitleA",
+		"author": "TestAuthorA",
+		"publisher": "TestPublisherA"
+	}`
+)
+
 func TestCreateBook(t *testing.T) {
 	start(t)
 	defer finish(t)
 
 	// test
-	testBody := `{
-		"title": "TestTitleA",
-		"author": "TestAuthorA",
-		"publisher": "TestPublisherA"
-	}`
-	body, code := sendRequest(
-		http.MethodPost,
-		"/books",
-		strings.NewReader(testBody),
-		setupRouter(http.MethodPost, "/books", CreateBook),
-	)
+	body, code := createBookA()
 	assert.Equal(t, http.StatusOK, code)
 
 	res := make(map[string]interface{})
@@ -44,27 +47,10 @@ func TestGetBookList(t *testing.T) {
 	defer finish(t)
 
 	// prepare data
-	testBodyList := []string{
-		`{
-			"title": "TestTitleA",
-			"author": "TestAuthorA",
-			"publisher": "TestPublisherA"
-		}`,
-		`{
-			"title": "TestTitleB",
-			"author": "TestAuthorB",
-			"publisher": "TestPublisherB"
-		}`,
-	}
-	for _, testBody := range testBodyList {
-		_, code := sendRequest(
-			http.MethodPost,
-			"/books",
-			strings.NewReader(testBody),
-			setupRouter(http.MethodPost, "/books", CreateBook),
-		)
-		assert.Equal(t, http.StatusOK, code)
-	}
+	_, code := createBookA()
+	assert.Equal(t, http.StatusOK, code)
+	_, code = createBookB()
+	assert.Equal(t, http.StatusOK, code)
 
 	// test
 	body, code := sendRequest(
@@ -85,17 +71,7 @@ func TestGetBookByID(t *testing.T) {
 	defer finish(t)
 
 	// prepare data
-	testBody := `{
-		"title": "TestTitleA",
-		"author": "TestAuthorA",
-		"publisher": "TestPublisherA"
-	}`
-	_, code := sendRequest(
-		http.MethodPost,
-		"/books",
-		strings.NewReader(testBody),
-		setupRouter(http.MethodPost, "/books", CreateBook),
-	)
+	_, code := createBookA()
 	assert.Equal(t, http.StatusOK, code)
 
 	// test
@@ -120,24 +96,14 @@ func TestUpdateBook(t *testing.T) {
 	defer finish(t)
 
 	// prepare data
-	testBody := `{
-		"title": "TestTitleA",
-		"author": "TestAuthorA",
-		"publisher": "TestPublisherA"
-	}`
-	_, code := sendRequest(
-		http.MethodPost,
-		"/books",
-		strings.NewReader(testBody),
-		setupRouter(http.MethodPost, "/books", CreateBook),
-	)
+	_, code := createBookA()
 	assert.Equal(t, http.StatusOK, code)
 
 	// test
 	updateBody := `{
-		"title": "TestTitleB",
-		"author": "TestAuthorB",
-		"publisher": "TestPublisherB"
+		"title": "UpdatedTestTitleA",
+		"author": "UpdatedTestAuthorA",
+		"publisher": "UpdatedTestPublisherA"
 	}`
 	body, code := sendRequest(
 		http.MethodPut,
@@ -150,9 +116,9 @@ func TestUpdateBook(t *testing.T) {
 	res := make(map[string]interface{})
 	assert.NoError(t, json.Unmarshal(body.Bytes(), &res))
 	assert.Equal(t, 1, int(res["id"].(float64)))
-	assert.Equal(t, "TestTitleB", res["title"].(string))
-	assert.Equal(t, "TestAuthorB", res["author"].(string))
-	assert.Equal(t, "TestPublisherB", res["publisher"].(string))
+	assert.Equal(t, "UpdatedTestTitleA", res["title"].(string))
+	assert.Equal(t, "UpdatedTestAuthorA", res["author"].(string))
+	assert.Equal(t, "UpdatedTestPublisherA", res["publisher"].(string))
 }
 
 func TestDeleteBook(t *testing.T) {
@@ -160,17 +126,7 @@ func TestDeleteBook(t *testing.T) {
 	defer finish(t)
 
 	// prepare data
-	testBody := `{
-		"title": "TestTitleA",
-		"author": "TestAuthorA",
-		"publisher": "TestPublisherA"
-	}`
-	_, code := sendRequest(
-		http.MethodPost,
-		"/books",
-		strings.NewReader(testBody),
-		setupRouter(http.MethodPost, "/books", CreateBook),
-	)
+	_, code := createBookA()
 	assert.Equal(t, http.StatusOK, code)
 
 	// test
@@ -200,6 +156,26 @@ func start(t *testing.T) {
 // start free test database
 func finish(t *testing.T) {
 	assert.NoError(t, config.FreeTestDB())
+}
+
+// createBookA create book with testBodyA
+func createBookA() (*bytes.Buffer, int) {
+	return sendRequest(
+		http.MethodPost,
+		"/books",
+		strings.NewReader(testBodyA),
+		setupRouter(http.MethodPost, "/books", CreateBook),
+	)
+}
+
+// createBookB create book with testBodyB
+func createBookB() (*bytes.Buffer, int) {
+	return sendRequest(
+		http.MethodPost,
+		"/books",
+		strings.NewReader(testBodyB),
+		setupRouter(http.MethodPost, "/books", CreateBook),
+	)
 }
 
 // setupRouter get router on given handler
