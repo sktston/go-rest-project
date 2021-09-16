@@ -12,7 +12,7 @@ func TestConnectingDatabase(t *testing.T) {
 	testDB, err := InitTestDB()
 	assert.NoError(t, err)
 
-	sqlDB, err := GetDB().DB()
+	sqlDB, err := testDB.DB()
 	assert.NoError(t, err)
 	assert.NoError(t, sqlDB.Ping())
 

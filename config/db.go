@@ -11,12 +11,6 @@ import (
 )
 
 var DB *gorm.DB
-var TestPrefix = "test_"
-
-func GetDB() *gorm.DB {
-	return DB
-}
-
 
 func InitDB() error {
 	// Connect to DB
