@@ -4,8 +4,8 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/jinzhu/copier"
 	"github.com/rs/zerolog/log"
-	"github.com/sktston/go-rest-project/model"
-	"github.com/sktston/go-rest-project/model/entity"
+	"github.com/sktston/go-rest-project/models"
+	"github.com/sktston/go-rest-project/models/entity"
 	"github.com/sktston/go-rest-project/repository"
 	"net/http"
 	"strconv"
@@ -17,11 +17,11 @@ import (
 // @Tags books
 // @Accept json
 // @Produce json
-// @Param body body model.BookRequestDTO false "body"
-// @Success 200 {object} model.BookResponseDTO
+// @Param body body models.BookRequestDTO false "body"
+// @Success 200 {object} models.BookResponseDTO
 // @Router /books [post]
 func CreateBook(c *gin.Context) {
-	var bookDTO model.BookRequestDTO
+	var bookDTO models.BookRequestDTO
 	if err := c.ShouldBindJSON(&bookDTO); err != nil {
 		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
@@ -36,7 +36,7 @@ func CreateBook(c *gin.Context) {
 		log.Error().Err(err).Msg("ERROR creating book data")
 		c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 	} else {
-		var bookResponseDTO model.BookResponseDTO
+		var bookResponseDTO models.BookResponseDTO
 		if err := copier.Copy(&bookResponseDTO, book); err != nil {
 			log.Error().Err(err).Msg("")
 			c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
@@ -50,14 +50,14 @@ func CreateBook(c *gin.Context) {
 // @Tags books
 // @Accept json
 // @Produce json
-// @Success 200 {object} []model.BookResponseDTO
+// @Success 200 {object} []models.BookResponseDTO
 // @Router /books [get]
 func GetBookList(c *gin.Context) {
 	var books []entity.Book
 	if err := repository.GetBookList(&books); err != nil {
 		c.AbortWithStatusJSON(http.StatusNotFound, gin.H{"error": err.Error()})
 	} else {
-		var bookResponseDTOList []model.BookResponseDTO
+		var bookResponseDTOList []models.BookResponseDTO
 		if err := copier.Copy(&bookResponseDTOList, books); err != nil {
 			log.Error().Err(err).Msg("")
 			c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
@@ -72,7 +72,7 @@ func GetBookList(c *gin.Context) {
 // @Accept json
 // @Produce json
 // @Param id path string true "id"
-// @Success 200 {object} model.BookResponseDTO
+// @Success 200 {object} models.BookResponseDTO
 // @Router /books/{id} [get]
 func GetBookByID(c *gin.Context) {
 	id, _ := strconv.Atoi(c.Param("id"))
@@ -80,7 +80,7 @@ func GetBookByID(c *gin.Context) {
 	if err := repository.GetBookByID(&book, id); err != nil {
 		c.AbortWithStatusJSON(http.StatusNotFound, gin.H{"error": err.Error()})
 	} else {
-		var bookResponseDTO model.BookResponseDTO
+		var bookResponseDTO models.BookResponseDTO
 		if err := copier.Copy(&bookResponseDTO, book); err != nil {
 			log.Error().Err(err).Msg("")
 			c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
@@ -95,8 +95,8 @@ func GetBookByID(c *gin.Context) {
 // @Accept json
 // @Produce json
 // @Param id path string true "id"
-// @Param body body model.BookRequestDTO false "body"
-// @Success 200 {object} model.BookResponseDTO
+// @Param body body models.BookRequestDTO false "body"
+// @Success 200 {object} models.BookResponseDTO
 // @Router /books/{id} [put]
 func UpdateBook(c *gin.Context) {
 	var book entity.Book
@@ -106,7 +106,7 @@ func UpdateBook(c *gin.Context) {
 		return
 	}
 
-	var bookRequestDTO model.BookRequestDTO
+	var bookRequestDTO models.BookRequestDTO
 	if err := c.ShouldBindJSON(&bookRequestDTO); err != nil {
 		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
@@ -119,7 +119,7 @@ func UpdateBook(c *gin.Context) {
 	if err := repository.UpdateBook(&book); err != nil {
 		c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 	} else {
-		var bookResponseDTO model.BookResponseDTO
+		var bookResponseDTO models.BookResponseDTO
 		if err := copier.Copy(&bookResponseDTO, book); err != nil {
 			log.Error().Err(err).Msg("")
 			c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
