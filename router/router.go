@@ -16,28 +16,23 @@ import (
 func SetupRouter() *gin.Engine {
 	health := healthcheck.NewHandler()
 
-	r := gin.New()
-	r.Use(gin.Recovery())
-	r.Use(logger.SetLogger(logger.WithWriter(zerolog.ConsoleWriter{Out:os.Stderr,TimeFormat: time.RFC3339})))
+	router := gin.New()
+	router.Use(gin.Recovery())
+	router.Use(logger.SetLogger(logger.WithWriter(zerolog.ConsoleWriter{Out: os.Stderr,TimeFormat: time.RFC3339})))
 
-	ug := r.Group("/books")
-	{
-		ug.GET("", handler.GetBooks)
-		ug.POST("", handler.CreateBook)
-		ug.GET("/:id", handler.GetBookByID)
-		ug.PUT("/:id", handler.UpdateBook)
-		ug.DELETE("/:id", handler.DeleteBook)
-	}
+	// Books
+	router.POST("/books", handler.CreateBook)
+	router.GET("/books", handler.GetBookList)
+	router.GET("/books/:id", handler.GetBookByID)
+	router.PUT("/books/:id", handler.UpdateBook)
+	router.DELETE("/books/:id", handler.DeleteBook)
 
 	// Health check apis for k8s
-	hg := r.Group("/health")
-	{
-		hg.GET("/live", gin.WrapF(health.LiveEndpoint))
-		hg.GET("/ready", gin.WrapF(health.ReadyEndpoint))
-	}
+	router.GET("/health/live", gin.WrapF(health.LiveEndpoint))
+	router.GET("/health/ready", gin.WrapF(health.ReadyEndpoint))
 
 	// Swagger
-	r.GET("/swagger/*any", ginSwagger.DisablingWrapHandler(swaggerFiles.Handler, "SWAGGER_DISABLE"))
+	router.GET("/swagger/*any", ginSwagger.DisablingWrapHandler(swaggerFiles.Handler, "SWAGGER_DISABLE"))
 
-	return r
+	return router
 }
