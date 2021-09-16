@@ -4,20 +4,19 @@ import (
 	"github.com/sktston/go-rest-project/config"
 	"github.com/sktston/go-rest-project/model/entity"
 	"github.com/stretchr/testify/assert"
+	"gorm.io/gorm"
 	"testing"
 )
 
-func enter(t *testing.T) {
-	err := config.LoadConfig()
+func enter(t *testing.T) *gorm.DB {
+	assert.NoError(t, config.LoadConfig())
+	testDB, err := config.InitTestDB()
 	assert.NoError(t, err)
-
-	err = config.InitTestDB()
-	assert.NoError(t, err)
+	return testDB
 }
 
-func leave(t *testing.T) {
-	err := config.FreeTestDB()
-	assert.NoError(t, err)
+func leave(t *testing.T, testDB *gorm.DB) {
+	assert.NoError(t, config.FreeTestDB(testDB))
 }
 
 func getTestBookList() []entity.Book {
@@ -28,8 +27,8 @@ func getTestBookList() []entity.Book {
 }
 
 func TestCreateBook(t *testing.T) {
-	enter(t)
-	defer leave(t)
+	testDB := enter(t)
+	defer leave(t, testDB)
 
 	for _, testBook := range getTestBookList() {
 		err := CreateBook(&testBook)
@@ -38,8 +37,8 @@ func TestCreateBook(t *testing.T) {
 }
 
 func TestGetAllBooks(t *testing.T) {
-	enter(t)
-	defer leave(t)
+	testDB := enter(t)
+	defer leave(t, testDB)
 
 	for _, testBook := range getTestBookList() {
 		err := CreateBook(&testBook)
@@ -60,8 +59,8 @@ func TestGetAllBooks(t *testing.T) {
 }
 
 func TestGetBookByID(t *testing.T) {
-	enter(t)
-	defer leave(t)
+	testDB := enter(t)
+	defer leave(t, testDB)
 
 	for _, testBook := range getTestBookList() {
 		err := CreateBook(&testBook)
@@ -78,8 +77,8 @@ func TestGetBookByID(t *testing.T) {
 }
 
 func TestUpdateBook(t *testing.T) {
-	enter(t)
-	defer leave(t)
+	testDB := enter(t)
+	defer leave(t, testDB)
 
 	testBookC := entity.Book{Title: "TestTitleC", Author: "TestAuthorC", Publisher: "TestPublisherC" }
 
@@ -108,8 +107,8 @@ func TestUpdateBook(t *testing.T) {
 }
 
 func TestDeleteBook(t *testing.T) {
-	enter(t)
-	defer leave(t)
+	testDB := enter(t)
+	defer leave(t, testDB)
 
 	for _, testBook := range getTestBookList() {
 		err := CreateBook(&testBook)

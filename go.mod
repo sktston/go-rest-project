@@ -6,6 +6,7 @@ require (
 	github.com/alecthomas/template v0.0.0-20190718012654-fb15b899a751
 	github.com/gin-contrib/logger v0.2.0
 	github.com/gin-gonic/gin v1.7.4
+	github.com/google/uuid v1.1.2
 	github.com/heptiolabs/healthcheck v0.0.0-20180807145615-6ff867650f40
 	github.com/jinzhu/copier v0.3.2
 	github.com/rs/zerolog v1.24.0

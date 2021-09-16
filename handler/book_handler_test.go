@@ -6,6 +6,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/sktston/go-rest-project/config"
 	"github.com/stretchr/testify/assert"
+	"gorm.io/gorm"
 	"io"
 	"net/http"
 	"net/http/httptest"
@@ -27,8 +28,8 @@ const (
 )
 
 func TestCreateBook(t *testing.T) {
-	start(t)
-	defer finish(t)
+	testDB := startTestDB(t)
+	defer finishTestDB(t, testDB)
 
 	// test
 	body, code := createBookA()
@@ -43,10 +44,10 @@ func TestCreateBook(t *testing.T) {
 }
 
 func TestGetBookList(t *testing.T) {
-	start(t)
-	defer finish(t)
+	testDB := startTestDB(t)
+	defer finishTestDB(t, testDB)
 
-	// prepare data
+	// prepare
 	_, code := createBookA()
 	assert.Equal(t, http.StatusOK, code)
 	_, code = createBookB()
@@ -67,10 +68,10 @@ func TestGetBookList(t *testing.T) {
 }
 
 func TestGetBookByID(t *testing.T) {
-	start(t)
-	defer finish(t)
+	testDB := startTestDB(t)
+	defer finishTestDB(t, testDB)
 
-	// prepare data
+	// prepare
 	_, code := createBookA()
 	assert.Equal(t, http.StatusOK, code)
 
@@ -92,10 +93,10 @@ func TestGetBookByID(t *testing.T) {
 }
 
 func TestUpdateBook(t *testing.T) {
-	start(t)
-	defer finish(t)
+	testDB := startTestDB(t)
+	defer finishTestDB(t, testDB)
 
-	// prepare data
+	// prepare
 	_, code := createBookA()
 	assert.Equal(t, http.StatusOK, code)
 
@@ -122,10 +123,10 @@ func TestUpdateBook(t *testing.T) {
 }
 
 func TestDeleteBook(t *testing.T) {
-	start(t)
-	defer finish(t)
+	testDB := startTestDB(t)
+	defer finishTestDB(t, testDB)
 
-	// prepare data
+	// prepare
 	_, code := createBookA()
 	assert.Equal(t, http.StatusOK, code)
 
@@ -147,15 +148,17 @@ func TestDeleteBook(t *testing.T) {
 	assert.Equal(t, http.StatusNotFound, code)
 }
 
-// start init test database
-func start(t *testing.T) {
+// startTestDB init test database
+func startTestDB(t *testing.T) *gorm.DB {
 	assert.NoError(t, config.LoadConfig())
-	assert.NoError(t, config.InitTestDB())
+	testDB, err := config.InitTestDB()
+	assert.NoError(t, err)
+	return testDB
 }
 
-// start free test database
-func finish(t *testing.T) {
-	assert.NoError(t, config.FreeTestDB())
+// finishTestDB free test database
+func finishTestDB(t *testing.T, testDB *gorm.DB) {
+	assert.NoError(t, config.FreeTestDB(testDB))
 }
 
 // createBookA create book with testBodyA

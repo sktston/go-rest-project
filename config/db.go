@@ -1,8 +1,8 @@
 package config
 
 import (
-	"errors"
 	"fmt"
+	"github.com/google/uuid"
 	"github.com/sktston/go-rest-project/model/entity"
 	"github.com/spf13/viper"
 	"gorm.io/driver/postgres"
@@ -43,7 +43,8 @@ func InitDB() error {
 	return nil
 }
 
-func InitTestDB() error {
+func InitTestDB() (*gorm.DB, error) {
+	testDBPrefix := uuid.New().String()+"_"
 	testDsn := fmt.Sprintf(
 		"host=%s user=%s password=%s dbname=%s port=%d sslmode=disable TimeZone=Asia/Seoul",
 		viper.GetString("test-database.host"),
@@ -54,21 +55,21 @@ func InitTestDB() error {
 	)
 	testDb, err := gorm.Open(postgres.Open(testDsn), &gorm.Config{
 		NamingStrategy: schema.NamingStrategy{
-			TablePrefix: TestPrefix, // table name prefix
+			TablePrefix: testDBPrefix, // prefix is testId_
 		},
 	})
 	if err != nil {
-		return err
+		return nil, err
 	}
 
 	// Migrate the schema (Create the book table)
 	err = MigrateSchema(testDb)
 	if err != nil {
-		return err
+		return nil, err
 	}
 
 	DB = testDb
-	return nil
+	return testDb, nil
 }
 
 func MigrateSchema(db *gorm.DB) error {
@@ -78,15 +79,9 @@ func MigrateSchema(db *gorm.DB) error {
 	return nil
 }
 
-func FreeTestDB() error {
-	db := GetDB()
-	// Check test DB
-	if db.NamingStrategy.TableName("") != TestPrefix {
-		return errors.New("invalid db: current DB is not test DB")
-	}
-
+func FreeTestDB(testDB *gorm.DB) error {
 	// Drop tables
-	if err := db.Migrator().DropTable(&entity.Book{}); err != nil {
+	if err := testDB.Migrator().DropTable(&entity.Book{}); err != nil {
 		return err
 	}
 	return nil
