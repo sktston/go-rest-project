@@ -42,7 +42,7 @@ var doc = `{
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/models.BookResponseDTO"
+                                "$ref": "#/definitions/model.BookResponseDTO"
                             }
                         }
                     }
@@ -65,7 +65,7 @@ var doc = `{
                         "name": "body",
                         "in": "body",
                         "schema": {
-                            "$ref": "#/definitions/models.BookRequestDTO"
+                            "$ref": "#/definitions/model.BookRequestDTO"
                         }
                     }
                 ],
@@ -73,7 +73,7 @@ var doc = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/models.BookResponseDTO"
+                            "$ref": "#/definitions/model.BookResponseDTO"
                         }
                     }
                 }
@@ -104,7 +104,7 @@ var doc = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/models.BookResponseDTO"
+                            "$ref": "#/definitions/model.BookResponseDTO"
                         }
                     }
                 }
@@ -133,7 +133,7 @@ var doc = `{
                         "name": "body",
                         "in": "body",
                         "schema": {
-                            "$ref": "#/definitions/models.BookRequestDTO"
+                            "$ref": "#/definitions/model.BookRequestDTO"
                         }
                     }
                 ],
@@ -141,7 +141,7 @@ var doc = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/models.BookResponseDTO"
+                            "$ref": "#/definitions/model.BookResponseDTO"
                         }
                     }
                 }
@@ -175,7 +175,7 @@ var doc = `{
         }
     },
     "definitions": {
-        "models.BookRequestDTO": {
+        "model.BookRequestDTO": {
             "type": "object",
             "required": [
                 "author",
@@ -200,7 +200,7 @@ var doc = `{
                 }
             }
         },
-        "models.BookResponseDTO": {
+        "model.BookResponseDTO": {
             "type": "object",
             "properties": {
                 "author": {

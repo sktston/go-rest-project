@@ -2,7 +2,7 @@ package repository
 
 import (
 	"github.com/sktston/go-rest-project/config"
-	"github.com/sktston/go-rest-project/models/entity"
+	"github.com/sktston/go-rest-project/model/entity"
 )
 
 //CreateBook ... Insert New data

@@ -3,7 +3,7 @@ package config
 import (
 	"fmt"
 	"github.com/google/uuid"
-	"github.com/sktston/go-rest-project/models/entity"
+	"github.com/sktston/go-rest-project/model/entity"
 	"github.com/spf13/viper"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"

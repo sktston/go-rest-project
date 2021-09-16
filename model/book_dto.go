@@ -1,4 +1,4 @@
-package models
+package model
 
 type BookRequestDTO struct {
 	Title    	string	`json:"title" binding:"required,min=5" example:"The Three Pigs"` // book title
