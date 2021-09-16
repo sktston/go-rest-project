@@ -3,6 +3,7 @@ package handler
 import (
 	"bytes"
 	"encoding/json"
+	"errors"
 	"github.com/gin-gonic/gin"
 	"github.com/sktston/go-rest-project/config"
 	"github.com/stretchr/testify/assert"
@@ -28,11 +29,17 @@ const (
 )
 
 func TestCreateBook(t *testing.T) {
+	// prepare
 	testDB := startTestDB(t)
 	defer finishTestDB(t, testDB)
 
 	// test
-	body, code := createBookA()
+	body, code := sendRequest(
+		http.MethodPost,
+		"/books",
+		strings.NewReader(testBodyA),
+		setupRouter(http.MethodPost, "/books", CreateBook),
+	)
 	assert.Equal(t, http.StatusOK, code)
 
 	res := make(map[string]interface{})
@@ -44,14 +51,12 @@ func TestCreateBook(t *testing.T) {
 }
 
 func TestGetBookList(t *testing.T) {
+	// prepare
 	testDB := startTestDB(t)
 	defer finishTestDB(t, testDB)
 
-	// prepare
-	_, code := createBookA()
-	assert.Equal(t, http.StatusOK, code)
-	_, code = createBookB()
-	assert.Equal(t, http.StatusOK, code)
+	assert.NoError(t, createBookA())
+	assert.NoError(t, createBookB())
 
 	// test
 	body, code := sendRequest(
@@ -64,16 +69,15 @@ func TestGetBookList(t *testing.T) {
 
 	var res []map[string]interface{}
 	assert.NoError(t, json.Unmarshal(body.Bytes(), &res))
-	assert.Equal(t, 2, len(res))
+	assert.Len(t, res, 2)
 }
 
 func TestGetBookByID(t *testing.T) {
+	// prepare
 	testDB := startTestDB(t)
 	defer finishTestDB(t, testDB)
 
-	// prepare
-	_, code := createBookA()
-	assert.Equal(t, http.StatusOK, code)
+	assert.NoError(t, createBookA())
 
 	// test
 	body, code := sendRequest(
@@ -93,12 +97,11 @@ func TestGetBookByID(t *testing.T) {
 }
 
 func TestUpdateBook(t *testing.T) {
+	// prepare
 	testDB := startTestDB(t)
 	defer finishTestDB(t, testDB)
 
-	// prepare
-	_, code := createBookA()
-	assert.Equal(t, http.StatusOK, code)
+	assert.NoError(t, createBookA())
 
 	// test
 	updateBody := `{
@@ -123,15 +126,14 @@ func TestUpdateBook(t *testing.T) {
 }
 
 func TestDeleteBook(t *testing.T) {
+	// prepare
 	testDB := startTestDB(t)
 	defer finishTestDB(t, testDB)
 
-	// prepare
-	_, code := createBookA()
-	assert.Equal(t, http.StatusOK, code)
+	assert.NoError(t, createBookA())
 
 	// test
-	_, code = sendRequest(
+	_, code := sendRequest(
 		http.MethodDelete,
 		"/books/1",
 		nil,
@@ -162,23 +164,33 @@ func finishTestDB(t *testing.T, testDB *gorm.DB) {
 }
 
 // createBookA create book with testBodyA
-func createBookA() (*bytes.Buffer, int) {
-	return sendRequest(
+func createBookA() error {
+	_, code := sendRequest(
 		http.MethodPost,
 		"/books",
 		strings.NewReader(testBodyA),
 		setupRouter(http.MethodPost, "/books", CreateBook),
 	)
+	if code == http.StatusOK {
+		return nil
+	} else {
+		return errors.New("createBookA failed")
+	}
 }
 
 // createBookB create book with testBodyB
-func createBookB() (*bytes.Buffer, int) {
-	return sendRequest(
+func createBookB() error {
+	_, code :=  sendRequest(
 		http.MethodPost,
 		"/books",
 		strings.NewReader(testBodyB),
 		setupRouter(http.MethodPost, "/books", CreateBook),
 	)
+	if code == http.StatusOK {
+		return nil
+	} else {
+		return errors.New("createBookB failed")
+	}
 }
 
 // setupRouter get router on given handler
