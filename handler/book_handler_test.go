@@ -150,19 +150,6 @@ func TestDeleteBook(t *testing.T) {
 	assert.Equal(t, http.StatusNotFound, code)
 }
 
-// startTestDB init test database
-func startTestDB(t *testing.T) *gorm.DB {
-	assert.NoError(t, config.LoadConfig())
-	testDB, err := config.InitTestDB()
-	assert.NoError(t, err)
-	return testDB
-}
-
-// finishTestDB free test database
-func finishTestDB(t *testing.T, testDB *gorm.DB) {
-	assert.NoError(t, config.FreeTestDB(testDB))
-}
-
 // createBookA create book with testBodyA
 func createBookA() error {
 	_, code := sendRequest(
@@ -191,6 +178,19 @@ func createBookB() error {
 	} else {
 		return errors.New("createBookB failed")
 	}
+}
+
+// startTestDB init test database
+func startTestDB(t *testing.T) *gorm.DB {
+	assert.NoError(t, config.LoadConfig())
+	testDB, err := config.InitTestDB()
+	assert.NoError(t, err)
+	return testDB
+}
+
+// finishTestDB free test database
+func finishTestDB(t *testing.T, testDB *gorm.DB) {
+	assert.NoError(t, config.FreeTestDB(testDB))
 }
 
 // setupRouter get router on given handler
