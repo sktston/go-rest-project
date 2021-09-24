@@ -7,7 +7,6 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/sktston/go-rest-project/config"
 	"github.com/stretchr/testify/assert"
-	"gorm.io/gorm"
 	"io"
 	"net/http"
 	"net/http/httptest"
@@ -30,8 +29,8 @@ const (
 
 func TestCreateBook(t *testing.T) {
 	// prepare
-	testDB := startTestDB(t)
-	defer finishTestDB(t, testDB)
+	testDB := config.InitTestDB(t)
+	defer config.FreeTestDB(t, testDB)
 
 	// test
 	body, code := sendRequest(
@@ -52,8 +51,8 @@ func TestCreateBook(t *testing.T) {
 
 func TestGetBookList(t *testing.T) {
 	// prepare
-	testDB := startTestDB(t)
-	defer finishTestDB(t, testDB)
+	testDB := config.InitTestDB(t)
+	defer config.FreeTestDB(t, testDB)
 
 	assert.NoError(t, createBookA())
 	assert.NoError(t, createBookB())
@@ -74,8 +73,8 @@ func TestGetBookList(t *testing.T) {
 
 func TestGetBookByID(t *testing.T) {
 	// prepare
-	testDB := startTestDB(t)
-	defer finishTestDB(t, testDB)
+	testDB := config.InitTestDB(t)
+	defer config.FreeTestDB(t, testDB)
 
 	assert.NoError(t, createBookA())
 
@@ -98,8 +97,8 @@ func TestGetBookByID(t *testing.T) {
 
 func TestUpdateBook(t *testing.T) {
 	// prepare
-	testDB := startTestDB(t)
-	defer finishTestDB(t, testDB)
+	testDB := config.InitTestDB(t)
+	defer config.FreeTestDB(t, testDB)
 
 	assert.NoError(t, createBookA())
 
@@ -127,8 +126,8 @@ func TestUpdateBook(t *testing.T) {
 
 func TestDeleteBook(t *testing.T) {
 	// prepare
-	testDB := startTestDB(t)
-	defer finishTestDB(t, testDB)
+	testDB := config.InitTestDB(t)
+	defer config.FreeTestDB(t, testDB)
 
 	assert.NoError(t, createBookA())
 
@@ -178,19 +177,6 @@ func createBookB() error {
 	} else {
 		return errors.New("createBookB failed")
 	}
-}
-
-// startTestDB init test database
-func startTestDB(t *testing.T) *gorm.DB {
-	assert.NoError(t, config.LoadConfig())
-	testDB, err := config.InitTestDB()
-	assert.NoError(t, err)
-	return testDB
-}
-
-// finishTestDB free test database
-func finishTestDB(t *testing.T, testDB *gorm.DB) {
-	assert.NoError(t, config.FreeTestDB(testDB))
 }
 
 // setupRouter get router on given handler

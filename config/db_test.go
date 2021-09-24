@@ -6,14 +6,11 @@ import (
 )
 
 func TestConnectingDatabase(t *testing.T) {
-	assert.NoError(t, LoadConfig())
-
-	testDB, err := InitTestDB()
-	assert.NoError(t, err)
+	testDB := InitTestDB(t)
 
 	sqlDB, err := testDB.DB()
 	assert.NoError(t, err)
 	assert.NoError(t, sqlDB.Ping())
 
-	assert.NoError(t, FreeTestDB(testDB))
+	FreeTestDB(t, testDB)
 }

@@ -5,10 +5,12 @@ import (
 	"github.com/google/uuid"
 	"github.com/sktston/go-rest-project/model/entity"
 	"github.com/spf13/viper"
+	"github.com/stretchr/testify/assert"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
 	"gorm.io/gorm/schema"
+	"testing"
 )
 
 var DB *gorm.DB
@@ -29,7 +31,7 @@ func InitDB() error {
 	}
 
 	// Migrate the schema (Create the book table)
-	if err := MigrateSchema(db); err != nil {
+	if err := migrateSchema(db); err != nil {
 		return err
 	}
 
@@ -37,16 +39,23 @@ func InitDB() error {
 	return nil
 }
 
-func MigrateSchema(db *gorm.DB) error {
+func migrateSchema(db *gorm.DB) error {
 	if err := db.AutoMigrate(&entity.Book{}); err != nil {
 		return err
 	}
 	return nil
 }
 
-// Belows are for unit testing
+//////////////////////////////
+// Helper for unit testing
+//////////////////////////////
 
-func InitTestDB() (*gorm.DB, error) {
+// InitTestDB init test database
+func InitTestDB(t *testing.T) *gorm.DB {
+	// Load configuration
+	assert.NoError(t, LoadConfig())
+
+	// Open test DB with random prefix
 	testDBPrefix := uuid.New().String()+"_"
 	testDsn := fmt.Sprintf(
 		"host=%s user=%s password=%s dbname=%s port=%d sslmode=disable TimeZone=Asia/Seoul",
@@ -62,23 +71,17 @@ func InitTestDB() (*gorm.DB, error) {
 		},
 		Logger: logger.Default.LogMode(logger.Silent),
 	})
-	if err != nil {
-		return nil, err
-	}
+	assert.NoError(t, err)
 
 	// Migrate the schema
-	if err := MigrateSchema(testDB); err != nil {
-		return nil, err
-	}
+	assert.NoError(t, migrateSchema(testDB))
 
 	DB = testDB
-	return testDB, nil
+	return testDB
 }
 
-func FreeTestDB(testDB *gorm.DB) error {
+// FreeTestDB free test database
+func FreeTestDB(t *testing.T, testDB *gorm.DB) {
 	// Drop tables
-	if err := testDB.Migrator().DropTable(&entity.Book{}); err != nil {
-		return err
-	}
-	return nil
+	assert.NoError(t, testDB.Migrator().DropTable(&entity.Book{}))
 }
