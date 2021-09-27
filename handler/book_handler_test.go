@@ -3,9 +3,11 @@ package handler
 import (
 	"encoding/json"
 	"errors"
+	"github.com/rs/zerolog/log"
 	"github.com/sktston/go-rest-project/test"
 	"github.com/stretchr/testify/assert"
 	"net/http"
+	"os"
 	"strings"
 	"testing"
 )
@@ -179,4 +181,21 @@ func createBookB() error {
 	} else {
 		return errors.New("createBookB failed")
 	}
+}
+
+func TestMain(m *testing.M) {
+	pool, resource, err := test.CreatePostgres()
+	if err != nil {
+		log.Fatal().Msgf("Could not create postgres: %s", err)
+	}
+
+	//Run tests
+	code := m.Run()
+
+	// You can't defer this because os.Exit doesn't care for defer
+	if err := test.DeletePostgres(pool, resource); err != nil {
+		log.Fatal().Msgf("Could not purge resource: %s", err)
+	}
+
+	os.Exit(code)
 }

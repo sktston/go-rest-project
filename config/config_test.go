@@ -19,10 +19,4 @@ func TestLoadConfig(t *testing.T) {
 	assert.NotEmpty(t, viper.GetString("database.user"))
 	assert.NotEmpty(t, viper.GetString("database.password"))
 	assert.NotEmpty(t, viper.GetString("database.dbname"))
-
-	assert.NotEmpty(t, viper.GetString("test-database.host"))
-	assert.NotEmpty(t, viper.GetString("test-database.port"))
-	assert.NotEmpty(t, viper.GetString("test-database.user"))
-	assert.NotEmpty(t, viper.GetString("test-database.password"))
-	assert.NotEmpty(t, viper.GetString("test-database.dbname"))
 }

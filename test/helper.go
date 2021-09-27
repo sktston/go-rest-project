@@ -2,19 +2,35 @@ package test
 
 import (
 	"bytes"
+	"database/sql"
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
+	_ "github.com/lib/pq"
+	"github.com/ory/dockertest/v3"
+	"github.com/ory/dockertest/v3/docker"
 	"github.com/sktston/go-rest-project/config"
-	"github.com/spf13/viper"
 	"github.com/stretchr/testify/assert"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
 	"gorm.io/gorm/schema"
 	"io"
+	"net"
 	"net/http/httptest"
 	"testing"
+	"time"
+)
+
+const (
+	testDBUser     = "user_name"
+	testDBPassword = "secret"
+	testDBName     = "dbname"
+)
+
+var (
+	testDBHost = ""
+	testDBPort = ""
 )
 
 // InitTestDB init test database
@@ -25,12 +41,12 @@ func InitTestDB(t *testing.T) *gorm.DB {
 	// Open test DB with random prefix
 	testDBPrefix := uuid.New().String()+"_"
 	testDsn := fmt.Sprintf(
-		"host=%s user=%s password=%s dbname=%s port=%d sslmode=disable TimeZone=Asia/Seoul",
-		viper.GetString("test-database.host"),
-		viper.GetString("test-database.user"),
-		viper.GetString("test-database.password"),
-		viper.GetString("test-database.dbname"),
-		viper.GetInt("test-database.port"),
+		"host=%s user=%s password=%s dbname=%s port=%s sslmode=disable TimeZone=Asia/Seoul",
+		testDBHost,
+		testDBUser,
+		testDBPassword,
+		testDBName,
+		testDBPort,
 	)
 	testDB, err := gorm.Open(postgres.Open(testDsn), &gorm.Config{
 		NamingStrategy: schema.NamingStrategy{
@@ -50,6 +66,61 @@ func InitTestDB(t *testing.T) *gorm.DB {
 // FreeTestDB free test database
 func FreeTestDB(t *testing.T, testDB *gorm.DB) {
 	assert.NoError(t, config.DropSchema(testDB))
+}
+
+// CreatePostgres create postgres docker
+func CreatePostgres() (*dockertest.Pool, *dockertest.Resource, error) {
+	// uses a sensible default on windows (tcp/http) and linux/osx (socket)
+	pool, err := dockertest.NewPool("")
+	if err != nil {
+		return nil, nil, err
+	}
+
+	// pulls an image, creates a container based on it and runs it
+	resource, err := pool.RunWithOptions(&dockertest.RunOptions{
+		Repository: "postgres",
+		Tag:        "11",
+		Env: []string{
+			"POSTGRES_PASSWORD="+ testDBPassword,
+			"POSTGRES_USER="+ testDBUser,
+			"POSTGRES_DB="+ testDBName,
+			"listen_addresses = '*'",
+		},
+	}, func(config *docker.HostConfig) {
+		// set AutoRemove to true so that stopped container goes away by itself
+		config.AutoRemove = true
+		config.RestartPolicy = docker.RestartPolicy{Name: "no"}
+	})
+	if err != nil {
+		return nil, nil, err
+	}
+	hostAndPort := resource.GetHostPort("5432/tcp")
+	databaseUrl := fmt.Sprintf("postgres://user_name:secret@%s/dbname?sslmode=disable", hostAndPort)
+
+	_ = resource.Expire(120) // Tell docker to hard kill the container in 120 seconds
+
+	// exponential backoff-retry, because the application in the container might not be ready to accept connections yet
+	pool.MaxWait = 120 * time.Second
+	if err := pool.Retry(func() error {
+		testSqlDB, err := sql.Open("postgres", databaseUrl)
+		if err != nil {
+			return err
+		}
+		return testSqlDB.Ping()
+	}); err != nil {
+		return nil, nil, err
+	}
+
+	testDBHost, testDBPort, _ = net.SplitHostPort(hostAndPort)
+	return pool, resource, nil
+}
+
+// DeletePostgres delete postgres docker
+func DeletePostgres(pool *dockertest.Pool, resource *dockertest.Resource) error {
+	if err := pool.Purge(resource); err != nil {
+		return err
+	}
+	return nil
 }
 
 // SetupRouter get router on given handler
