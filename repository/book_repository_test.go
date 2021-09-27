@@ -1,8 +1,8 @@
 package repository
 
 import (
-	"github.com/sktston/go-rest-project/config"
 	"github.com/sktston/go-rest-project/model/entity"
+	"github.com/sktston/go-rest-project/test"
 	"github.com/stretchr/testify/assert"
 	"testing"
 )
@@ -29,8 +29,8 @@ func getTestBookB() entity.Book {
 
 func TestCreateBook(t *testing.T) {
 	// prepare
-	testDB := config.InitTestDB(t)
-	defer config.FreeTestDB(t, testDB)
+	testDB := test.InitTestDB(t)
+	defer test.FreeTestDB(t, testDB)
 
 	// test
 	testBookA := getTestBookA()
@@ -39,8 +39,8 @@ func TestCreateBook(t *testing.T) {
 
 func TestGetBookList(t *testing.T) {
 	// prepare
-	testDB := config.InitTestDB(t)
-	defer config.FreeTestDB(t, testDB)
+	testDB := test.InitTestDB(t)
+	defer test.FreeTestDB(t, testDB)
 
 	testBookA := getTestBookA()
 	assert.NoError(t, CreateBook(&testBookA))
@@ -55,8 +55,8 @@ func TestGetBookList(t *testing.T) {
 
 func TestGetBookByID(t *testing.T) {
 	// prepare
-	testDB := config.InitTestDB(t)
-	defer config.FreeTestDB(t, testDB)
+	testDB := test.InitTestDB(t)
+	defer test.FreeTestDB(t, testDB)
 
 	testBookA := getTestBookA()
 	assert.NoError(t, CreateBook(&testBookA))
@@ -72,8 +72,8 @@ func TestGetBookByID(t *testing.T) {
 
 func TestUpdateBook(t *testing.T) {
 	// prepare
-	testDB := config.InitTestDB(t)
-	defer config.FreeTestDB(t, testDB)
+	testDB := test.InitTestDB(t)
+	defer test.FreeTestDB(t, testDB)
 
 	testBookA := getTestBookA()
 	assert.NoError(t, CreateBook(&testBookA))
@@ -97,8 +97,8 @@ func TestUpdateBook(t *testing.T) {
 
 func TestDeleteBook(t *testing.T) {
 	// prepare
-	testDB := config.InitTestDB(t)
-	defer config.FreeTestDB(t, testDB)
+	testDB := test.InitTestDB(t)
+	defer test.FreeTestDB(t, testDB)
 
 	testBookA := getTestBookA()
 	assert.NoError(t, CreateBook(&testBookA))

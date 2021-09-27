@@ -1,15 +1,11 @@
 package handler
 
 import (
-	"bytes"
 	"encoding/json"
 	"errors"
-	"github.com/gin-gonic/gin"
-	"github.com/sktston/go-rest-project/config"
+	"github.com/sktston/go-rest-project/test"
 	"github.com/stretchr/testify/assert"
-	"io"
 	"net/http"
-	"net/http/httptest"
 	"strings"
 	"testing"
 )
@@ -33,15 +29,15 @@ const (
 
 func TestCreateBook(t *testing.T) {
 	// prepare
-	testDB := config.InitTestDB(t)
-	defer config.FreeTestDB(t, testDB)
+	testDB := test.InitTestDB(t)
+	defer test.FreeTestDB(t, testDB)
 
 	// test
-	body, code := sendRequest(
+	body, code := test.SendRequest(
 		http.MethodPost,
 		"/books",
 		strings.NewReader(testBodyA),
-		setupRouter(http.MethodPost, "/books", CreateBook),
+		test.SetupRouter(http.MethodPost, "/books", CreateBook),
 	)
 	assert.Equal(t, http.StatusOK, code)
 
@@ -55,18 +51,18 @@ func TestCreateBook(t *testing.T) {
 
 func TestGetBookList(t *testing.T) {
 	// prepare
-	testDB := config.InitTestDB(t)
-	defer config.FreeTestDB(t, testDB)
+	testDB := test.InitTestDB(t)
+	defer test.FreeTestDB(t, testDB)
 
 	assert.NoError(t, createBookA())
 	assert.NoError(t, createBookB())
 
 	// test
-	body, code := sendRequest(
+	body, code := test.SendRequest(
 		http.MethodGet,
 		"/books",
 		nil,
-		setupRouter(http.MethodGet, "/books", GetBookList),
+		test.SetupRouter(http.MethodGet, "/books", GetBookList),
 	)
 	assert.Equal(t, http.StatusOK, code)
 
@@ -77,17 +73,17 @@ func TestGetBookList(t *testing.T) {
 
 func TestGetBookByID(t *testing.T) {
 	// prepare
-	testDB := config.InitTestDB(t)
-	defer config.FreeTestDB(t, testDB)
+	testDB := test.InitTestDB(t)
+	defer test.FreeTestDB(t, testDB)
 
 	assert.NoError(t, createBookA())
 
 	// test
-	body, code := sendRequest(
+	body, code := test.SendRequest(
 		http.MethodGet,
 		"/books/1",
 		nil,
-		setupRouter(http.MethodGet, "/books/:id", GetBookByID),
+		test.SetupRouter(http.MethodGet, "/books/:id", GetBookByID),
 	)
 	assert.Equal(t, http.StatusOK, code)
 
@@ -101,8 +97,8 @@ func TestGetBookByID(t *testing.T) {
 
 func TestUpdateBook(t *testing.T) {
 	// prepare
-	testDB := config.InitTestDB(t)
-	defer config.FreeTestDB(t, testDB)
+	testDB := test.InitTestDB(t)
+	defer test.FreeTestDB(t, testDB)
 
 	assert.NoError(t, createBookA())
 
@@ -112,11 +108,11 @@ func TestUpdateBook(t *testing.T) {
 		"author": "UpdatedTestAuthorA",
 		"publisher": "UpdatedTestPublisherA"
 	}`
-	body, code := sendRequest(
+	body, code := test.SendRequest(
 		http.MethodPut,
 		"/books/1",
 		strings.NewReader(updateBody),
-		setupRouter(http.MethodPut, "/books/:id", UpdateBook),
+		test.SetupRouter(http.MethodPut, "/books/:id", UpdateBook),
 	)
 	assert.Equal(t, http.StatusOK, code)
 
@@ -130,25 +126,25 @@ func TestUpdateBook(t *testing.T) {
 
 func TestDeleteBook(t *testing.T) {
 	// prepare
-	testDB := config.InitTestDB(t)
-	defer config.FreeTestDB(t, testDB)
+	testDB := test.InitTestDB(t)
+	defer test.FreeTestDB(t, testDB)
 
 	assert.NoError(t, createBookA())
 
 	// test
-	_, code := sendRequest(
+	_, code := test.SendRequest(
 		http.MethodDelete,
 		"/books/1",
 		nil,
-		setupRouter(http.MethodDelete, "/books/:id", DeleteBook),
+		test.SetupRouter(http.MethodDelete, "/books/:id", DeleteBook),
 	)
 	assert.Equal(t, http.StatusOK, code)
 
-	_, code = sendRequest(
+	_, code = test.SendRequest(
 		http.MethodGet,
 		"/books/1",
 		nil,
-		setupRouter(http.MethodGet, "/books/:id", GetBookByID),
+		test.SetupRouter(http.MethodGet, "/books/:id", GetBookByID),
 	)
 	assert.Equal(t, http.StatusNotFound, code)
 }
@@ -157,11 +153,11 @@ func TestDeleteBook(t *testing.T) {
 
 // createBookA create book with testBodyA
 func createBookA() error {
-	_, code := sendRequest(
+	_, code := test.SendRequest(
 		http.MethodPost,
 		"/books",
 		strings.NewReader(testBodyA),
-		setupRouter(http.MethodPost, "/books", CreateBook),
+		test.SetupRouter(http.MethodPost, "/books", CreateBook),
 	)
 	if code == http.StatusOK {
 		return nil
@@ -172,34 +168,15 @@ func createBookA() error {
 
 // createBookB create book with testBodyB
 func createBookB() error {
-	_, code :=  sendRequest(
+	_, code :=  test.SendRequest(
 		http.MethodPost,
 		"/books",
 		strings.NewReader(testBodyB),
-		setupRouter(http.MethodPost, "/books", CreateBook),
+		test.SetupRouter(http.MethodPost, "/books", CreateBook),
 	)
 	if code == http.StatusOK {
 		return nil
 	} else {
 		return errors.New("createBookB failed")
 	}
-}
-
-// setupRouter get router on given handler
-func setupRouter(httpMethod string, path string, handler gin.HandlerFunc) *gin.Engine {
-	// prepare router
-	gin.SetMode(gin.TestMode)
-	router := gin.New()
-	router.Handle(httpMethod, path, handler)
-	return router
-}
-
-// sendRequest reads response from given http request.
-func sendRequest(httpMethod string, target string, requestBody io.Reader, router *gin.Engine) (*bytes.Buffer, int) {
-	// serve http on given response and request
-	req := httptest.NewRequest(httpMethod, target, requestBody)
-	rr := httptest.NewRecorder()
-	router.ServeHTTP(rr, req)
-
-	return rr.Body, rr.Code
 }
