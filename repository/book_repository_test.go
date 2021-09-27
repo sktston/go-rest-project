@@ -7,6 +7,8 @@ import (
 	"testing"
 )
 
+// Constants
+
 func getTestBookA() entity.Book {
 	return entity.Book{
 		Title: "TestTitleA",
@@ -22,6 +24,8 @@ func getTestBookB() entity.Book {
 		Publisher: "TestPublisherB",
 	}
 }
+
+// Tests
 
 func TestCreateBook(t *testing.T) {
 	// prepare

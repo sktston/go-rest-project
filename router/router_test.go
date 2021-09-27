@@ -13,6 +13,8 @@ import (
 	"testing"
 )
 
+// Tests
+
 func TestHealthLive(t *testing.T) {
 	health := healthcheck.NewHandler()
 	_, code := sendRequest(
@@ -45,6 +47,7 @@ func TestSwaggerDoc(t *testing.T) {
 	assert.Equal(t, http.StatusOK, code)
 }
 
+// Helpers
 
 // setupRouter get router on given handler
 func setupRouter(httpMethod string, path string, handler gin.HandlerFunc) *gin.Engine {

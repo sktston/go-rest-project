@@ -6,6 +6,8 @@ import (
 	"testing"
 )
 
+// Tests
+
 func TestLoadConfig(t *testing.T) {
 	err := LoadConfig()
 	assert.NoError(t, err)

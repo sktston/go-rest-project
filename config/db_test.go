@@ -5,6 +5,8 @@ import (
 	"testing"
 )
 
+// Tests
+
 func TestConnectingDatabase(t *testing.T) {
 	testDB := InitTestDB(t)
 

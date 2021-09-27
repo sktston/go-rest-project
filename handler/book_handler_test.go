@@ -14,6 +14,8 @@ import (
 	"testing"
 )
 
+// Constants
+
 const (
 	testBodyA = `{
 		"title": "TestTitleA",
@@ -26,6 +28,8 @@ const (
 		"publisher": "TestPublisherA"
 	}`
 )
+
+// Tests
 
 func TestCreateBook(t *testing.T) {
 	// prepare
@@ -148,6 +152,8 @@ func TestDeleteBook(t *testing.T) {
 	)
 	assert.Equal(t, http.StatusNotFound, code)
 }
+
+// Helpers
 
 // createBookA create book with testBodyA
 func createBookA() error {
