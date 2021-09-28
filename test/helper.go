@@ -23,11 +23,8 @@ import (
 )
 
 const postgresVersion = "13"
-
-var (
-	testDBHost = ""
-	testDBPort = ""
-)
+var testDBHost = ""
+var testDBPort = ""
 
 // CreatePostgres create postgres docker container
 func CreatePostgres() (*dockertest.Pool, *dockertest.Resource, error) {
@@ -52,6 +49,9 @@ func CreatePostgres() (*dockertest.Pool, *dockertest.Resource, error) {
 		config.AutoRemove = true
 		config.RestartPolicy = docker.RestartPolicy{Name: "no"}
 	})
+	if err != nil {
+		return nil, nil, err
+	}
 	hostAndPort := resource.GetHostPort("5432/tcp")
 	databaseUrl := fmt.Sprintf("postgres://user_name:secret@%s/dbname?sslmode=disable", hostAndPort)
 

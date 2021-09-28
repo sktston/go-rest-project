@@ -20,11 +20,8 @@ import (
 )
 
 const postgresVersion = "13"
-
-var (
-	testDBHost = ""
-	testDBPort = ""
-)
+var testDBHost = ""
+var testDBPort = ""
 
 // Tests
 
