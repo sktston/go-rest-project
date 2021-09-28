@@ -83,9 +83,6 @@ func RemovePostgres(pool *dockertest.Pool, resource *dockertest.Resource) error 
 
 // InitTestDB init test database
 func InitTestDB(t *testing.T) *gorm.DB {
-	// Load configuration
-	assert.NoError(t, config.LoadConfig())
-
 	// Open test DB with random prefix
 	testDBPrefix := uuid.New().String()+"_"
 	testDsn := fmt.Sprintf(
