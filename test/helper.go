@@ -9,6 +9,7 @@ import (
 	_ "github.com/lib/pq"
 	"github.com/ory/dockertest/v3"
 	"github.com/ory/dockertest/v3/docker"
+	"github.com/rs/zerolog"
 	"github.com/sktston/go-rest-project/database"
 	"github.com/stretchr/testify/assert"
 	"gorm.io/driver/postgres"
@@ -130,4 +131,10 @@ func SendRequest(httpMethod string, target string, requestBody io.Reader, router
 	router.ServeHTTP(rr, req)
 
 	return rr.Body, rr.Code
+}
+
+// DisableLogger disable zero log and gin logger
+func DisableLogger() {
+	zerolog.SetGlobalLevel(zerolog.Disabled)
+	gin.SetMode(gin.TestMode)
 }

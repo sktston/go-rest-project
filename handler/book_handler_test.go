@@ -155,6 +155,8 @@ func TestDeleteBook(t *testing.T) {
 
 // TestMain main function to use postgres database
 func TestMain(m *testing.M) {
+	test.DisableLogger()
+
 	// create postgres docker container
 	pool, resource, err := test.CreatePostgres()
 	if err != nil {
