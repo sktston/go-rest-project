@@ -3,11 +3,13 @@ package router
 import (
 	"github.com/gin-gonic/gin"
 	"github.com/heptiolabs/healthcheck"
+	"github.com/rs/zerolog"
 	"github.com/sktston/go-rest-project/test"
 	"github.com/stretchr/testify/assert"
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
 	"net/http"
+	"os"
 	"testing"
 )
 
@@ -43,4 +45,15 @@ func TestSwaggerDoc(t *testing.T) {
 		test.SetupRouter(http.MethodGet, "/swagger/*any",ginSwagger.DisablingWrapHandler(swaggerFiles.Handler, "SWAGGER_DISABLE")),
 	)
 	assert.Equal(t, http.StatusOK, code)
+}
+
+// Helpers
+
+// TestMain main function
+func TestMain(m *testing.M) {
+	zerolog.SetGlobalLevel(zerolog.Disabled)
+
+	// run tests
+	code := m.Run()
+	os.Exit(code)
 }

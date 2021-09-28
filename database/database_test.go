@@ -7,7 +7,7 @@ import (
 	_ "github.com/lib/pq"
 	"github.com/ory/dockertest/v3"
 	"github.com/ory/dockertest/v3/docker"
-	"github.com/rs/zerolog/log"
+	"github.com/rs/zerolog"
 	"github.com/stretchr/testify/assert"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
@@ -58,12 +58,15 @@ func TestConnectingDatabase(t *testing.T) {
 
 // Helpers
 
-// TestMain main function to use postgres database
+// TestMain main function with postgres database
 func TestMain(m *testing.M) {
+	zerolog.SetGlobalLevel(zerolog.Disabled)
+
 	// create postgres docker container
 	pool, resource, err := createPostgres()
 	if err != nil {
-		log.Fatal().Msgf("Could not create postgres: %s", err)
+		fmt.Printf("Could not create postgres: %s", err)
+		os.Exit(-1)
 	}
 
 	//Run tests
@@ -71,7 +74,8 @@ func TestMain(m *testing.M) {
 
 	// remove postgres docker container
 	if err := removePostgres(pool, resource); err != nil {
-		log.Fatal().Msgf("Could not purge resource: %s", err)
+		fmt.Printf("Could not remove postgres: %s", err)
+		os.Exit(-1)
 	}
 
 	os.Exit(code)

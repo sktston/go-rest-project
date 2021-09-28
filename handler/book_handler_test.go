@@ -3,7 +3,8 @@ package handler
 import (
 	"encoding/json"
 	"errors"
-	"github.com/rs/zerolog/log"
+	"fmt"
+	"github.com/rs/zerolog"
 	"github.com/sktston/go-rest-project/test"
 	"github.com/stretchr/testify/assert"
 	"net/http"
@@ -153,22 +154,24 @@ func TestDeleteBook(t *testing.T) {
 
 // Helpers
 
-// TestMain main function to use postgres database
+// TestMain main function with postgres database
 func TestMain(m *testing.M) {
-	test.DisableLogger()
+	zerolog.SetGlobalLevel(zerolog.Disabled)
 
 	// create postgres docker container
 	pool, resource, err := test.CreatePostgres()
 	if err != nil {
-		log.Fatal().Msgf("Could not create postgres: %s", err)
+		fmt.Printf("Could not create postgres: %s", err)
+		os.Exit(-1)
 	}
 
-	// run tests
+	//Run tests
 	code := m.Run()
 
 	// remove postgres docker container
 	if err := test.RemovePostgres(pool, resource); err != nil {
-		log.Fatal().Msgf("Could not purge resource: %s", err)
+		fmt.Printf("Could not remove postgres: %s", err)
+		os.Exit(-1)
 	}
 
 	os.Exit(code)

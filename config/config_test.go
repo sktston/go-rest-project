@@ -1,8 +1,10 @@
 package config
 
 import (
+	"github.com/rs/zerolog"
 	"github.com/spf13/viper"
 	"github.com/stretchr/testify/assert"
+	"os"
 	"testing"
 )
 
@@ -19,4 +21,15 @@ func TestLoadConfig(t *testing.T) {
 	assert.NotEmpty(t, viper.GetString("database.user"))
 	assert.NotEmpty(t, viper.GetString("database.password"))
 	assert.NotEmpty(t, viper.GetString("database.dbname"))
+}
+
+// Helpers
+
+// TestMain main function
+func TestMain(m *testing.M) {
+	zerolog.SetGlobalLevel(zerolog.Disabled)
+
+	// run tests
+	code := m.Run()
+	os.Exit(code)
 }
