@@ -1,4 +1,4 @@
-package config
+package db
 
 import (
 	"fmt"
@@ -8,10 +8,10 @@ import (
 	"gorm.io/gorm"
 )
 
-var DB *gorm.DB
+var gormDB *gorm.DB
 
 func InitDB() error {
-	// Connect to DB
+	// Connect to gormDB
 	dsn := fmt.Sprintf(
 		"host=%s user=%s password=%s dbname=%s port=%d sslmode=disable TimeZone=Asia/Seoul",
 		viper.GetString("database.host"),
@@ -34,8 +34,12 @@ func InitDB() error {
 	return nil
 }
 
+func GetDB() *gorm.DB {
+	return gormDB
+}
+
 func SetDB(db *gorm.DB) {
-	DB = db
+	gormDB = db
 }
 
 func MigrateSchema(db *gorm.DB) error {

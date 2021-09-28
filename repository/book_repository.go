@@ -1,13 +1,13 @@
 package repository
 
 import (
-	"github.com/sktston/go-rest-project/config"
+	"github.com/sktston/go-rest-project/db"
 	"github.com/sktston/go-rest-project/model/entity"
 )
 
 //CreateBook ... Insert New data
 func CreateBook(book *entity.Book) (err error) {
-	if err = config.DB.Create(book).Error; err != nil {
+	if err = db.GetDB().Create(book).Error; err != nil {
 		return err
 	}
 	return nil
@@ -15,7 +15,7 @@ func CreateBook(book *entity.Book) (err error) {
 
 //GetBookList Fetch all book data
 func GetBookList(book *[]entity.Book) (err error) {
-	if err = config.DB.Find(book).Error; err != nil {
+	if err = db.GetDB().Find(book).Error; err != nil {
 		return err
 	}
 	return nil
@@ -23,7 +23,7 @@ func GetBookList(book *[]entity.Book) (err error) {
 
 //GetBookByID ... Fetch only one book by Id
 func GetBookByID(book *entity.Book, id int) (err error) {
-	if err = config.DB.First(book, id).Error; err != nil {
+	if err = db.GetDB().First(book, id).Error; err != nil {
 		return err
 	}
 	return nil
@@ -31,12 +31,12 @@ func GetBookByID(book *entity.Book, id int) (err error) {
 
 //UpdateBook ... Update book
 func UpdateBook(book *entity.Book) (err error) {
-	config.DB.Save(book)
+	db.GetDB().Save(book)
 	return nil
 }
 
 //DeleteBook ... Delete book
 func DeleteBook(book *entity.Book, id int) (err error) {
-	config.DB.Delete(book, id)
+	db.GetDB().Delete(book, id)
 	return nil
 }

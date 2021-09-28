@@ -1,4 +1,4 @@
-package config
+package db
 
 import (
 	"database/sql"
@@ -26,7 +26,7 @@ var testDBPort = ""
 // Tests
 
 func TestConnectingDatabase(t *testing.T) {
-	// Open test DB with random prefix
+	// Open test gormDB with random prefix
 	testDBPrefix := uuid.New().String()+"_"
 	testDsn := fmt.Sprintf(
 		"host=%s user=%s password=%s dbname=%s port=%s sslmode=disable TimeZone=Asia/Seoul",
