@@ -9,7 +9,7 @@ import (
 	_ "github.com/lib/pq"
 	"github.com/ory/dockertest/v3"
 	"github.com/ory/dockertest/v3/docker"
-	"github.com/sktston/go-rest-project/db"
+	"github.com/sktston/go-rest-project/database"
 	"github.com/stretchr/testify/assert"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
@@ -102,15 +102,15 @@ func InitTestDB(t *testing.T) *gorm.DB {
 	assert.NoError(t, err)
 
 	// Migrate the schema
-	assert.NoError(t, db.MigrateSchema(testDB))
+	assert.NoError(t, database.MigrateSchema(testDB))
 
-	db.SetDB(testDB)
+	database.SetDB(testDB)
 	return testDB
 }
 
 // FreeTestDB free test database
 func FreeTestDB(t *testing.T, testDB *gorm.DB) {
-	assert.NoError(t, db.DropSchema(testDB))
+	assert.NoError(t, database.DropSchema(testDB))
 }
 
 // SetupRouter get router on given handler

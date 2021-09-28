@@ -5,7 +5,7 @@ import (
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
 	"github.com/sktston/go-rest-project/config"
-	"github.com/sktston/go-rest-project/db"
+	"github.com/sktston/go-rest-project/database"
 	"github.com/sktston/go-rest-project/router"
 	"github.com/spf13/viper"
 	"os"
@@ -28,7 +28,7 @@ func main() {
 	}
 
 	//Connect to gormDB and Migrate Schema if not exist
-	if err := db.InitDB(); err != nil {
+	if err := database.InitDB(); err != nil {
 		log.Fatal().Err(err).Caller().Msgf("cannot connect gormDB")
 	}
 
