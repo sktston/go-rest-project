@@ -19,11 +19,7 @@ import (
 	"time"
 )
 
-const (
-	testDBUser     = "user_name"
-	testDBPassword = "secret"
-	testDBName     = "dbname"
-)
+const postgresVersion = "13"
 
 var (
 	testDBHost = ""
@@ -38,9 +34,9 @@ func TestConnectingDatabase(t *testing.T) {
 	testDsn := fmt.Sprintf(
 		"host=%s user=%s password=%s dbname=%s port=%s sslmode=disable TimeZone=Asia/Seoul",
 		testDBHost,
-		testDBUser,
-		testDBPassword,
-		testDBName,
+		"user_name",
+		"secret",
+		"dbname",
 		testDBPort,
 	)
 	testDB, err := gorm.Open(postgres.Open(testDsn), &gorm.Config{
@@ -65,8 +61,9 @@ func TestConnectingDatabase(t *testing.T) {
 
 // Helpers
 
+// TestMain main function to use postgres database
 func TestMain(m *testing.M) {
-	// create postgres docker
+	// create postgres docker container
 	pool, resource, err := createPostgres()
 	if err != nil {
 		log.Fatal().Msgf("Could not create postgres: %s", err)
@@ -75,14 +72,15 @@ func TestMain(m *testing.M) {
 	//Run tests
 	code := m.Run()
 
-	// delete postgres docker
-	if err := deletePostgres(pool, resource); err != nil {
+	// remove postgres docker container
+	if err := removePostgres(pool, resource); err != nil {
 		log.Fatal().Msgf("Could not purge resource: %s", err)
 	}
 
 	os.Exit(code)
 }
 
+// createPostgres create postgres docker container
 func createPostgres() (*dockertest.Pool, *dockertest.Resource, error) {
 	// uses a sensible default on windows (tcp/http) and linux/osx (socket)
 	pool, err := dockertest.NewPool("")
@@ -93,11 +91,11 @@ func createPostgres() (*dockertest.Pool, *dockertest.Resource, error) {
 	// pulls an image, creates a container based on it and runs it
 	resource, err := pool.RunWithOptions(&dockertest.RunOptions{
 		Repository: "postgres",
-		Tag:        "11",
+		Tag:        postgresVersion,
 		Env: []string{
-			"POSTGRES_PASSWORD="+ testDBPassword,
-			"POSTGRES_USER="+ testDBUser,
-			"POSTGRES_DB="+ testDBName,
+			"POSTGRES_PASSWORD=secret",
+			"POSTGRES_USER=user_name",
+			"POSTGRES_DB=dbname",
 			"listen_addresses = '*'",
 		},
 	}, func(config *docker.HostConfig) {
@@ -129,8 +127,8 @@ func createPostgres() (*dockertest.Pool, *dockertest.Resource, error) {
 	return pool, resource, nil
 }
 
-// deletePostgres delete postgres docker
-func deletePostgres(pool *dockertest.Pool, resource *dockertest.Resource) error {
+// removePostgres remove postgres docker container
+func removePostgres(pool *dockertest.Pool, resource *dockertest.Resource) error {
 	if err := pool.Purge(resource); err != nil {
 		return err
 	}

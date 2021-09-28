@@ -153,6 +153,25 @@ func TestDeleteBook(t *testing.T) {
 
 // Helpers
 
+// TestMain main function to use postgres database
+func TestMain(m *testing.M) {
+	// create postgres docker container
+	pool, resource, err := test.CreatePostgres()
+	if err != nil {
+		log.Fatal().Msgf("Could not create postgres: %s", err)
+	}
+
+	// run tests
+	code := m.Run()
+
+	// remove postgres docker container
+	if err := test.RemovePostgres(pool, resource); err != nil {
+		log.Fatal().Msgf("Could not purge resource: %s", err)
+	}
+
+	os.Exit(code)
+}
+
 // createBookA create book with testBodyA
 func createBookA() error {
 	_, code := test.SendRequest(
@@ -181,21 +200,4 @@ func createBookB() error {
 	} else {
 		return errors.New("createBookB failed")
 	}
-}
-
-func TestMain(m *testing.M) {
-	pool, resource, err := test.CreatePostgres()
-	if err != nil {
-		log.Fatal().Msgf("Could not create postgres: %s", err)
-	}
-
-	//Run tests
-	code := m.Run()
-
-	// You can't defer this because os.Exit doesn't care for defer
-	if err := test.DeletePostgres(pool, resource); err != nil {
-		log.Fatal().Msgf("Could not purge resource: %s", err)
-	}
-
-	os.Exit(code)
 }

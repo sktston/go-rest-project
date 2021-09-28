@@ -113,18 +113,19 @@ func TestDeleteBook(t *testing.T) {
 
 // Helpers
 
+// TestMain main function to use postgres database
 func TestMain(m *testing.M) {
-	// create postgres docker
+	// create postgres docker container
 	pool, resource, err := test.CreatePostgres()
 	if err != nil {
 		log.Fatal().Msgf("Could not create postgres: %s", err)
 	}
 
-	//Run tests
+	// run tests
 	code := m.Run()
 
-	// delete postgres docker
-	if err := test.DeletePostgres(pool, resource); err != nil {
+	// remove postgres docker container
+	if err := test.RemovePostgres(pool, resource); err != nil {
 		log.Fatal().Msgf("Could not purge resource: %s", err)
 	}
 
