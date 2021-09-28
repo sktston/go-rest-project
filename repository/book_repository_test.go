@@ -1,9 +1,11 @@
 package repository
 
 import (
+	"github.com/rs/zerolog/log"
 	"github.com/sktston/go-rest-project/model/entity"
 	"github.com/sktston/go-rest-project/test"
 	"github.com/stretchr/testify/assert"
+	"os"
 	"testing"
 )
 
@@ -107,4 +109,25 @@ func TestDeleteBook(t *testing.T) {
 	var book entity.Book
 	assert.NoError(t, DeleteBook(&book, 1))
 	assert.Error(t, GetBookByID(&book, 1))
+}
+
+// Helpers
+
+// TestMain main function to use postgres database
+func TestMain(m *testing.M) {
+	// create postgres docker container
+	pool, resource, err := test.CreatePostgres()
+	if err != nil {
+		log.Fatal().Msgf("Could not create postgres: %s", err)
+	}
+
+	// run tests
+	code := m.Run()
+
+	// remove postgres docker container
+	if err := test.RemovePostgres(pool, resource); err != nil {
+		log.Fatal().Msgf("Could not purge resource: %s", err)
+	}
+
+	os.Exit(code)
 }

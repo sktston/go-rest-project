@@ -9,6 +9,8 @@ require (
 	github.com/google/uuid v1.1.2
 	github.com/heptiolabs/healthcheck v0.0.0-20180807145615-6ff867650f40
 	github.com/jinzhu/copier v0.3.2
+	github.com/lib/pq v1.3.0
+	github.com/ory/dockertest/v3 v3.8.0
 	github.com/rs/zerolog v1.24.0
 	github.com/spf13/viper v1.8.1
 	github.com/stretchr/testify v1.7.0
