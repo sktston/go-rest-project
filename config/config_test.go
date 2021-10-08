@@ -21,6 +21,8 @@ func TestLoadConfig(t *testing.T) {
 	assert.NotEmpty(t, viper.GetString("database.user"))
 	assert.NotEmpty(t, viper.GetString("database.password"))
 	assert.NotEmpty(t, viper.GetString("database.dbname"))
+
+	assert.NotEmpty(t, viper.GetString("log.level"))
 }
 
 // Helpers
