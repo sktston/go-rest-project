@@ -5,17 +5,13 @@ import (
 	"database/sql"
 	"fmt"
 	"github.com/gin-gonic/gin"
-	"github.com/google/uuid"
 	_ "github.com/lib/pq"
 	"github.com/ory/dockertest/v3"
 	"github.com/ory/dockertest/v3/docker"
 	"github.com/rs/zerolog"
 	"github.com/sktston/go-rest-project/database"
+	"github.com/spf13/viper"
 	"github.com/stretchr/testify/assert"
-	"gorm.io/driver/postgres"
-	"gorm.io/gorm"
-	"gorm.io/gorm/logger"
-	"gorm.io/gorm/schema"
 	"io"
 	"net"
 	"net/http/httptest"
@@ -83,35 +79,22 @@ func RemovePostgres(pool *dockertest.Pool, resource *dockertest.Resource) error 
 }
 
 // InitTestDB init test database
-func InitTestDB(t *testing.T) *gorm.DB {
-	// Open test gormDB with random prefix
-	testDBPrefix := uuid.New().String()+"_"
-	testDsn := fmt.Sprintf(
-		"host=%s user=%s password=%s dbname=%s port=%s sslmode=disable TimeZone=Asia/Seoul",
-		testDBHost,
-		"user_name",
-		"secret",
-		"dbname",
-		testDBPort,
-	)
-	testDB, err := gorm.Open(postgres.Open(testDsn), &gorm.Config{
-		NamingStrategy: schema.NamingStrategy{
-			TablePrefix: testDBPrefix, // prefix is testId_
-		},
-		Logger: logger.Default.LogMode(logger.Silent),
-	})
-	assert.NoError(t, err)
+func InitTestDB(t *testing.T) {
+	// prepare
+	viper.Set("database.host", testDBHost)
+	viper.Set("database.user", "user_name")
+	viper.Set("database.password", "secret")
+	viper.Set("database.dbname", "dbname")
+	viper.Set("database.port", testDBPort)
 
-	// Migrate the schema
-	assert.NoError(t, database.MigrateSchema(testDB))
+	viper.Set("log.level", "TEST")
 
-	database.SetDB(testDB)
-	return testDB
+	assert.NoError(t, database.InitDB())
 }
 
 // FreeTestDB free test database
-func FreeTestDB(t *testing.T, testDB *gorm.DB) {
-	assert.NoError(t, database.DropSchema(testDB))
+func FreeTestDB(t *testing.T) {
+	assert.NoError(t, database.DropSchema(database.GetDB()))
 }
 
 // SetupRouter get router on given handler

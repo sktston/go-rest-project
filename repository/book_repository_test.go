@@ -32,8 +32,8 @@ func getTestBookB() entity.Book {
 
 func TestCreateBook(t *testing.T) {
 	// prepare
-	testDB := test.InitTestDB(t)
-	defer test.FreeTestDB(t, testDB)
+	test.InitTestDB(t)
+	defer test.FreeTestDB(t)
 
 	// test
 	testBookA := getTestBookA()
@@ -42,8 +42,8 @@ func TestCreateBook(t *testing.T) {
 
 func TestGetBookList(t *testing.T) {
 	// prepare
-	testDB := test.InitTestDB(t)
-	defer test.FreeTestDB(t, testDB)
+	test.InitTestDB(t)
+	defer test.FreeTestDB(t)
 
 	testBookA := getTestBookA()
 	assert.NoError(t, CreateBook(&testBookA))
@@ -58,8 +58,8 @@ func TestGetBookList(t *testing.T) {
 
 func TestGetBookByID(t *testing.T) {
 	// prepare
-	testDB := test.InitTestDB(t)
-	defer test.FreeTestDB(t, testDB)
+	test.InitTestDB(t)
+	defer test.FreeTestDB(t)
 
 	testBookA := getTestBookA()
 	assert.NoError(t, CreateBook(&testBookA))
@@ -75,8 +75,8 @@ func TestGetBookByID(t *testing.T) {
 
 func TestUpdateBook(t *testing.T) {
 	// prepare
-	testDB := test.InitTestDB(t)
-	defer test.FreeTestDB(t, testDB)
+	test.InitTestDB(t)
+	defer test.FreeTestDB(t)
 
 	testBookA := getTestBookA()
 	assert.NoError(t, CreateBook(&testBookA))
@@ -100,8 +100,8 @@ func TestUpdateBook(t *testing.T) {
 
 func TestDeleteBook(t *testing.T) {
 	// prepare
-	testDB := test.InitTestDB(t)
-	defer test.FreeTestDB(t, testDB)
+	test.InitTestDB(t)
+	defer test.FreeTestDB(t)
 
 	testBookA := getTestBookA()
 	assert.NoError(t, CreateBook(&testBookA))
