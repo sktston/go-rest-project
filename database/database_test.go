@@ -6,7 +6,7 @@ import (
 	_ "github.com/lib/pq"
 	"github.com/ory/dockertest/v3"
 	"github.com/ory/dockertest/v3/docker"
-	"github.com/rs/zerolog"
+	"github.com/sktston/go-rest-project/config"
 	"github.com/spf13/viper"
 	"github.com/stretchr/testify/assert"
 	"net"
@@ -46,7 +46,8 @@ func TestInitDB(t *testing.T) {
 
 // TestMain main function with postgres database
 func TestMain(m *testing.M) {
-	zerolog.SetGlobalLevel(zerolog.Disabled)
+	viper.Set("log.level", "TEST")
+	config.SetLogLevel()
 
 	// create postgres docker container
 	pool, resource, err := createPostgres()

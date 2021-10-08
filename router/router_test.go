@@ -3,8 +3,9 @@ package router
 import (
 	"github.com/gin-gonic/gin"
 	"github.com/heptiolabs/healthcheck"
-	"github.com/rs/zerolog"
+	"github.com/sktston/go-rest-project/config"
 	"github.com/sktston/go-rest-project/test"
+	"github.com/spf13/viper"
 	"github.com/stretchr/testify/assert"
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
@@ -51,7 +52,8 @@ func TestSwaggerDoc(t *testing.T) {
 
 // TestMain main function
 func TestMain(m *testing.M) {
-	zerolog.SetGlobalLevel(zerolog.Disabled)
+	viper.Set("log.level", "TEST")
+	config.SetLogLevel()
 
 	// run tests
 	code := m.Run()

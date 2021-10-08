@@ -1,7 +1,6 @@
 package config
 
 import (
-	"github.com/rs/zerolog"
 	"github.com/spf13/viper"
 	"github.com/stretchr/testify/assert"
 	"os"
@@ -29,7 +28,8 @@ func TestLoadConfig(t *testing.T) {
 
 // TestMain main function
 func TestMain(m *testing.M) {
-	zerolog.SetGlobalLevel(zerolog.Disabled)
+	viper.Set("log.level", "TEST")
+	SetLogLevel()
 
 	// run tests
 	code := m.Run()
