@@ -3,16 +3,12 @@ package database
 import (
 	"database/sql"
 	"fmt"
-	"github.com/google/uuid"
 	_ "github.com/lib/pq"
 	"github.com/ory/dockertest/v3"
 	"github.com/ory/dockertest/v3/docker"
-	"github.com/rs/zerolog"
+	"github.com/sktston/go-rest-project/config"
+	"github.com/spf13/viper"
 	"github.com/stretchr/testify/assert"
-	"gorm.io/driver/postgres"
-	"gorm.io/gorm"
-	"gorm.io/gorm/logger"
-	"gorm.io/gorm/schema"
 	"net"
 	"os"
 	"testing"
@@ -25,42 +21,33 @@ var testDBPort = ""
 
 // Tests
 
-func TestConnectingDatabase(t *testing.T) {
-	// Open test gormDB with random prefix
-	testDBPrefix := uuid.New().String()+"_"
-	testDsn := fmt.Sprintf(
-		"host=%s user=%s password=%s dbname=%s port=%s sslmode=disable TimeZone=Asia/Seoul",
-		testDBHost,
-		"user_name",
-		"secret",
-		"dbname",
-		testDBPort,
-	)
-	testDB, err := gorm.Open(postgres.Open(testDsn), &gorm.Config{
-		NamingStrategy: schema.NamingStrategy{
-			TablePrefix: testDBPrefix, // prefix is testId_
-		},
-		Logger: logger.Default.LogMode(logger.Silent),
-	})
-	assert.NoError(t, err)
+func TestInitDB(t *testing.T) {
+	// prepare
+	viper.Set("database.host", testDBHost)
+	viper.Set("database.user", "user_name")
+	viper.Set("database.password", "secret")
+	viper.Set("database.dbname", "dbname")
+	viper.Set("database.port", testDBPort)
 
-	// Migrate the schema
-	assert.NoError(t, MigrateSchema(testDB))
+	viper.Set("log.level", "TEST")
 
 	// Test
-	sqlDB, err := testDB.DB()
+	assert.NoError(t, InitDB())
+
+	sqlDB, err := GetDB().DB()
 	assert.NoError(t, err)
 	assert.NoError(t, sqlDB.Ping())
 
 	// Free
-	assert.NoError(t, DropSchema(testDB))
+	assert.NoError(t, DropSchema(GetDB()))
 }
 
 // Helpers
 
 // TestMain main function with postgres database
 func TestMain(m *testing.M) {
-	zerolog.SetGlobalLevel(zerolog.Disabled)
+	viper.Set("log.level", "TEST")
+	config.SetLogLevel()
 
 	// create postgres docker container
 	pool, resource, err := createPostgres()

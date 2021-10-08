@@ -7,3 +7,6 @@ database:
   user: postgres
   password: postgres
   dbname: postgres
+
+log:
+  level: DEBUG

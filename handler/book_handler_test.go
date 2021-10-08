@@ -4,8 +4,9 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"github.com/rs/zerolog"
+	"github.com/sktston/go-rest-project/config"
 	"github.com/sktston/go-rest-project/test"
+	"github.com/spf13/viper"
 	"github.com/stretchr/testify/assert"
 	"net/http"
 	"os"
@@ -32,8 +33,8 @@ const (
 
 func TestCreateBook(t *testing.T) {
 	// prepare
-	testDB := test.InitTestDB(t)
-	defer test.FreeTestDB(t, testDB)
+	test.InitTestDB(t)
+	defer test.FreeTestDB(t)
 
 	// test
 	body, code := test.SendRequest(
@@ -54,8 +55,8 @@ func TestCreateBook(t *testing.T) {
 
 func TestGetBookList(t *testing.T) {
 	// prepare
-	testDB := test.InitTestDB(t)
-	defer test.FreeTestDB(t, testDB)
+	test.InitTestDB(t)
+	defer test.FreeTestDB(t)
 
 	assert.NoError(t, createBookA())
 	assert.NoError(t, createBookB())
@@ -76,8 +77,8 @@ func TestGetBookList(t *testing.T) {
 
 func TestGetBookByID(t *testing.T) {
 	// prepare
-	testDB := test.InitTestDB(t)
-	defer test.FreeTestDB(t, testDB)
+	test.InitTestDB(t)
+	defer test.FreeTestDB(t)
 
 	assert.NoError(t, createBookA())
 
@@ -100,8 +101,8 @@ func TestGetBookByID(t *testing.T) {
 
 func TestUpdateBook(t *testing.T) {
 	// prepare
-	testDB := test.InitTestDB(t)
-	defer test.FreeTestDB(t, testDB)
+	test.InitTestDB(t)
+	defer test.FreeTestDB(t)
 
 	assert.NoError(t, createBookA())
 
@@ -129,8 +130,8 @@ func TestUpdateBook(t *testing.T) {
 
 func TestDeleteBook(t *testing.T) {
 	// prepare
-	testDB := test.InitTestDB(t)
-	defer test.FreeTestDB(t, testDB)
+	test.InitTestDB(t)
+	defer test.FreeTestDB(t)
 
 	assert.NoError(t, createBookA())
 
@@ -156,7 +157,8 @@ func TestDeleteBook(t *testing.T) {
 
 // TestMain main function with postgres database
 func TestMain(m *testing.M) {
-	zerolog.SetGlobalLevel(zerolog.Disabled)
+	viper.Set("log.level", "TEST")
+	config.SetLogLevel()
 
 	// create postgres docker container
 	pool, resource, err := test.CreatePostgres()
