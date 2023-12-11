@@ -4,10 +4,10 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"github.com/sktston/go-rest-project/config"
-	"github.com/sktston/go-rest-project/test"
 	"github.com/spf13/viper"
 	"github.com/stretchr/testify/assert"
+	"go-rest-project/config"
+	"go-rest-project/test"
 	"net/http"
 	"os"
 	"strings"
@@ -196,7 +196,7 @@ func createBookA() error {
 
 // createBookB create book with testBodyB
 func createBookB() error {
-	_, code :=  test.SendRequest(
+	_, code := test.SendRequest(
 		http.MethodPost,
 		"/books",
 		strings.NewReader(testBodyB),

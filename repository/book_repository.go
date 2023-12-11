@@ -1,11 +1,11 @@
 package repository
 
 import (
-	"github.com/sktston/go-rest-project/database"
-	"github.com/sktston/go-rest-project/model/entity"
+	"go-rest-project/database"
+	"go-rest-project/model/entity"
 )
 
-//CreateBook ... Insert New data
+// CreateBook ... Insert New data
 func CreateBook(book *entity.Book) (err error) {
 	if err = database.GetDB().Create(book).Error; err != nil {
 		return err
@@ -13,7 +13,7 @@ func CreateBook(book *entity.Book) (err error) {
 	return nil
 }
 
-//GetBookList Fetch all book data
+// GetBookList Fetch all book data
 func GetBookList(book *[]entity.Book) (err error) {
 	if err = database.GetDB().Find(book).Error; err != nil {
 		return err
@@ -21,7 +21,7 @@ func GetBookList(book *[]entity.Book) (err error) {
 	return nil
 }
 
-//GetBookByID ... Fetch only one book by Id
+// GetBookByID ... Fetch only one book by Id
 func GetBookByID(book *entity.Book, id int) (err error) {
 	if err = database.GetDB().First(book, id).Error; err != nil {
 		return err
@@ -29,13 +29,13 @@ func GetBookByID(book *entity.Book, id int) (err error) {
 	return nil
 }
 
-//UpdateBook ... Update book
+// UpdateBook ... Update book
 func UpdateBook(book *entity.Book) (err error) {
 	database.GetDB().Save(book)
 	return nil
 }
 
-//DeleteBook ... Delete book
+// DeleteBook ... Delete book
 func DeleteBook(book *entity.Book, id int) (err error) {
 	database.GetDB().Delete(book, id)
 	return nil

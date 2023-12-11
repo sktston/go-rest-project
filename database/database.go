@@ -2,8 +2,8 @@ package database
 
 import (
 	"fmt"
-	"github.com/sktston/go-rest-project/model/entity"
 	"github.com/spf13/viper"
+	"go-rest-project/model/entity"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
@@ -26,9 +26,9 @@ func InitDB() error {
 	// Set log level for gorm
 	var level logger.LogLevel
 	switch strings.ToUpper(viper.GetString("log.level")) {
-	case "DEBUG" :
+	case "DEBUG":
 		level = logger.Info
-	case "TEST" :
+	case "TEST":
 		level = logger.Silent
 	default:
 		level = logger.Warn

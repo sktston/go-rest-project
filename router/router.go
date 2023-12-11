@@ -5,10 +5,10 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/heptiolabs/healthcheck"
 	"github.com/rs/zerolog"
-	_ "github.com/sktston/go-rest-project/docs"
-	"github.com/sktston/go-rest-project/handler"
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
+	_ "go-rest-project/docs"
+	"go-rest-project/handler"
 	"os"
 	"time"
 )
@@ -18,7 +18,7 @@ func SetupRouter() *gin.Engine {
 
 	router := gin.New()
 	router.Use(gin.Recovery())
-	router.Use(logger.SetLogger(logger.WithWriter(zerolog.ConsoleWriter{Out: os.Stderr,TimeFormat: time.RFC3339})))
+	router.Use(logger.SetLogger(logger.WithWriter(zerolog.ConsoleWriter{Out: os.Stderr, TimeFormat: time.RFC3339})))
 
 	// Books
 	router.POST("/books", handler.CreateBook)
