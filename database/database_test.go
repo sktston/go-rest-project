@@ -6,9 +6,9 @@ import (
 	_ "github.com/lib/pq"
 	"github.com/ory/dockertest/v3"
 	"github.com/ory/dockertest/v3/docker"
-	"github.com/sktston/go-rest-project/config"
 	"github.com/spf13/viper"
 	"github.com/stretchr/testify/assert"
+	"go-rest-project/config"
 	"net"
 	"os"
 	"testing"
@@ -16,6 +16,7 @@ import (
 )
 
 const postgresVersion = "13"
+
 var testDBHost = ""
 var testDBPort = ""
 

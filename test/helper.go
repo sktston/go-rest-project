@@ -8,9 +8,9 @@ import (
 	_ "github.com/lib/pq"
 	"github.com/ory/dockertest/v3"
 	"github.com/ory/dockertest/v3/docker"
-	"github.com/sktston/go-rest-project/database"
 	"github.com/spf13/viper"
 	"github.com/stretchr/testify/assert"
+	"go-rest-project/database"
 	"io"
 	"net"
 	"net/http/httptest"
@@ -19,6 +19,7 @@ import (
 )
 
 const postgresVersion = "13"
+
 var testDBHost = ""
 var testDBPort = ""
 

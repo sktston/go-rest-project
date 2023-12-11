@@ -3,12 +3,12 @@ package router
 import (
 	"github.com/gin-gonic/gin"
 	"github.com/heptiolabs/healthcheck"
-	"github.com/sktston/go-rest-project/config"
-	"github.com/sktston/go-rest-project/test"
 	"github.com/spf13/viper"
 	"github.com/stretchr/testify/assert"
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
+	"go-rest-project/config"
+	"go-rest-project/test"
 	"net/http"
 	"os"
 	"testing"
@@ -43,7 +43,7 @@ func TestSwaggerDoc(t *testing.T) {
 		http.MethodGet,
 		"/swagger/doc.json",
 		nil,
-		test.SetupRouter(http.MethodGet, "/swagger/*any",ginSwagger.DisablingWrapHandler(swaggerFiles.Handler, "SWAGGER_DISABLE")),
+		test.SetupRouter(http.MethodGet, "/swagger/*any", ginSwagger.DisablingWrapHandler(swaggerFiles.Handler, "SWAGGER_DISABLE")),
 	)
 	assert.Equal(t, http.StatusOK, code)
 }

@@ -2,11 +2,11 @@ package repository
 
 import (
 	"fmt"
-	"github.com/sktston/go-rest-project/config"
-	"github.com/sktston/go-rest-project/model/entity"
-	"github.com/sktston/go-rest-project/test"
 	"github.com/spf13/viper"
 	"github.com/stretchr/testify/assert"
+	"go-rest-project/config"
+	"go-rest-project/model/entity"
+	"go-rest-project/test"
 	"os"
 	"testing"
 )
@@ -15,16 +15,16 @@ import (
 
 func getTestBookA() entity.Book {
 	return entity.Book{
-		Title: "TestTitleA",
-		Author: "TestAuthorA",
+		Title:     "TestTitleA",
+		Author:    "TestAuthorA",
 		Publisher: "TestPublisherA",
 	}
 }
 
 func getTestBookB() entity.Book {
 	return entity.Book{
-		Title: "TestTitleB",
-		Author: "TestAuthorB",
+		Title:     "TestTitleB",
+		Author:    "TestAuthorB",
 		Publisher: "TestPublisherB",
 	}
 }

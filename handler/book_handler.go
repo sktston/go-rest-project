@@ -4,13 +4,12 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/jinzhu/copier"
 	"github.com/rs/zerolog/log"
-	"github.com/sktston/go-rest-project/model"
-	"github.com/sktston/go-rest-project/model/entity"
-	"github.com/sktston/go-rest-project/repository"
+	"go-rest-project/model"
+	"go-rest-project/model/entity"
+	"go-rest-project/repository"
 	"net/http"
 	"strconv"
 )
-
 
 // CreateBook godoc
 // @Summary Create Book
@@ -127,7 +126,6 @@ func UpdateBook(c *gin.Context) {
 		c.JSON(http.StatusOK, bookResponseDTO)
 	}
 }
-
 
 // DeleteBook godoc
 // @Summary Delete the book
